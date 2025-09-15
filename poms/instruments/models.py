@@ -3,7 +3,7 @@ import logging
 import traceback
 from bisect import bisect_left
 from datetime import date, datetime, timedelta
-from math import isnan, isclose
+from math import isclose, isnan
 from typing import Optional
 
 import QuantLib as ql

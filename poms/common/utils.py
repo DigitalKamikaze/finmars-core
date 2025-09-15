@@ -1,10 +1,8 @@
 import calendar
 import contextlib
-import copy
 import datetime
 import logging
 from datetime import timedelta
-from typing import Union
 
 import pandas as pd
 
@@ -26,13 +24,13 @@ calc_shift_date_map = {
     "D": lambda day: pd.Timestamp(day),
     "W": lambda day: pd.Timestamp(day) - pd.DateOffset(days=day.weekday()),
     "M": lambda day: pd.Timestamp(day).replace(day=1),
-    "Q": lambda day: pd.Timestamp(f"{day.year}-{((day.month-1)//3)*3+1:02d}-01"),
+    "Q": lambda day: pd.Timestamp(f"{day.year}-{((day.month - 1) // 3) * 3 + 1:02d}-01"),
     "Y": lambda day: pd.Timestamp(f"{day.year}-01-01"),
     "ED": lambda day: pd.Timestamp(day),
     "EW": lambda day: pd.Timestamp(day) - pd.DateOffset(days=day.weekday()) + pd.DateOffset(days=6),
     "EM": lambda day: (pd.Timestamp(day).replace(day=1) + pd.offsets.MonthEnd(0)),
-    "EQ": lambda day: pd.Timestamp(f"{day.year}-{((day.month-1)//3)*3+3:02d}-01") + pd.offsets.MonthEnd(0),
-    "EY": lambda day: pd.Timestamp(f"{day.year}-12-31"),  # End of year
+    "EQ": lambda day: pd.Timestamp(f"{day.year}-{((day.month - 1) // 3) * 3 + 3:02d}-01") + pd.offsets.MonthEnd(0),
+    "EY": lambda day: pd.Timestamp(f"{day.year}-12-31"),
 }
 frequency_map = {
     "D": lambda shift=1: pd.offsets.Day(shift),
@@ -176,28 +174,6 @@ def recursive_callback(dict, callback, prop="children"):
     if prop in dict:
         for item in dict[prop]:
             recursive_callback(item, callback)
-
-
-class MemorySavingQuerysetIterator:
-    def __init__(self, queryset, max_obj_num=1000):
-        self._base_queryset = queryset
-        self._generator = self._setup()
-        self.max_obj_num = max_obj_num
-
-    def _setup(self):
-        for i in range(0, self._base_queryset.count(), self.max_obj_num):
-            # By making a copy of the queryset and using that to actually access
-            # the object, we ensure that there are only `max_obj_num` objects in
-            # memory at any given time
-            smaller_queryset = copy.deepcopy(self._base_queryset)[i: i + self.max_obj_num]
-            # logger.debug('Grabbing next %s objects from DB' % self.max_obj_num)
-            yield from smaller_queryset.iterator()
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        return self._generator.next()
 
 
 def format_float(val):
@@ -438,7 +414,7 @@ def compare_versions(version1, version2):
 
 
 # region Dates
-def is_business_day(date_obj: Union[pd.Timestamp, datetime.date, datetime.datetime]) -> bool:
+def is_business_day(date_obj: pd.Timestamp | datetime.date | datetime.datetime) -> bool:
     """Check if a date is a business day (Monday=0 to Friday=4)."""
     return date_obj.weekday() < 5
 

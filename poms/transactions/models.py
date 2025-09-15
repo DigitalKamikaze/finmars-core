@@ -3,7 +3,7 @@ import logging
 import time
 import traceback
 from datetime import date
-from math import isnan, isclose
+from math import isclose, isnan
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.contenttypes.models import ContentType
