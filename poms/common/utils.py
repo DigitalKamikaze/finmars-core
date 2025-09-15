@@ -651,7 +651,7 @@ def split_date_range(
     if frequency not in VALID_FREQUENCY:
         raise ValueError(f"Invalid frequency '{frequency}'. Valid options: {VALID_FREQUENCY}")
     
-    # Handle "C" frequency to return always string tuple
+    # Handle "C" frequency to return always list with one tuple
     if frequency == "C":
         start_str = start_date if isinstance(start_date, str) else start_date.strftime(settings.API_DATE_FORMAT)
         end_str = end_date if isinstance(end_date, str) else end_date.strftime(settings.API_DATE_FORMAT)
