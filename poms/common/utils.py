@@ -149,33 +149,6 @@ def add_view_and_manage_permissions():
             )
 
 
-def delete_keys_from_dict(dict_del, the_keys):
-    """
-    Delete the keys present in the lst_keys from the dictionary.
-    Loops recursively over nested dictionaries.
-    """
-    # make sure the_keys is a set to get O(1) lookups
-    if type(the_keys) is not set:
-        the_keys = set(the_keys)
-    for k, v in dict_del.items():
-        if k in the_keys:
-            del dict_del[k]
-
-        if isinstance(v, dict):
-            delete_keys_from_dict(v, the_keys)
-    return dict_del
-
-
-def recursive_callback(dict, callback, prop="children"):
-    callback(dict)
-
-    # print(dict)
-
-    if prop in dict:
-        for item in dict[prop]:
-            recursive_callback(item, callback)
-
-
 def format_float(val):
     # 0.000050000892 -> 0.0000500009
     # 0.005623 -> 0.005623
@@ -186,7 +159,6 @@ def format_float(val):
     except ValueError:
         return val
 
-    # return float(format(round(val, 10), '.10f').rstrip("0").rstrip('.'))
     return round(val, 10)
 
 
