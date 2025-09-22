@@ -319,14 +319,92 @@ class ObjectStateModel(models.Model):
     source_type = models.CharField(
         default="manual",
     )
-    source_origin = models.CharField(
-        default="manual",
-    )
-    external_id = models.CharField(null=True, help_text="how object is referenced in external system")
+
     is_manual_locked = models.BooleanField(default=False, help_text="just a flag to disable form on frontend")
     is_locked = models.BooleanField(
         default=True,
         help_text="blocked to any change (only from finmars frontend change is allowed)",
+    )
+
+    # DATA PRINCIPLE FIELDS 2025-09
+
+    provider_user_code = models.CharField(
+        max_length=1024,
+        null=True,
+        blank=True, # cannot be null # TODO in 1.24
+        verbose_name=gettext_lazy("provider user code"),
+        help_text=gettext_lazy("Unique Identifier for this object in Provider Database"),
+    )
+
+    provider_version_semantic = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=gettext_lazy("provider version semantic"),
+        help_text=gettext_lazy("Semantic Version https://semver.org/"),
+    )
+
+    provider_version_calendar = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=gettext_lazy("provider version semantic"),
+        help_text=gettext_lazy("Calendar Version https://calver.org/"),
+    )
+
+    source_user_code = models.CharField(
+        max_length=1024,
+        null=True,
+        blank=True,
+        verbose_name=gettext_lazy("source user code"),
+        help_text=gettext_lazy("provider can have several sources available, e.g. Provider data_aggregator may have sources: bank1 and bank2"),
+    )
+
+    source_version_semantic = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=gettext_lazy("source semantic version"),
+        help_text=gettext_lazy("Semantic Version https://semver.org/"),
+    )
+
+    source_version_calendar = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=gettext_lazy("source calendar version"),
+        help_text=gettext_lazy("Calendar Version https://calver.org/"),
+    )
+
+    reference_ids = models.JSONField(
+        default=dict,  # will create {}
+        blank=True,
+        verbose_name=gettext_lazy("reference_ids"),
+        help_text=gettext_lazy("json-like field for different key-value pairs identifying entity in different sources, e.g. instrument ids by standards (ISIN: xxx, FIGI: yyy) and by provider/source (bank1_id: xxx, provider1_id: yyy) can be used simultaneously")
+    )
+
+    credential_user_code = models.CharField(
+        max_length=1024,
+        null=True,
+        blank=True,
+        verbose_name=gettext_lazy("credential user code"),
+        help_text=gettext_lazy("Finmars Vault credential's user code used to access provider's data"),
+    )
+
+    credential_version_semantic = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=gettext_lazy("credential semantic version"),
+        help_text=gettext_lazy("Finmars Vault credential's version. Semantic Version https://semver.org/"),
+    )
+
+    credential_version_calendar = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=gettext_lazy("credential calendar version"),
+        help_text=gettext_lazy("Finmars Vault credential's version. Calendar Version https://calver.org/"),
     )
 
     class Meta:
