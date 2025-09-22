@@ -210,7 +210,5 @@ class ModelWithObjectStateSerializer(serializers.ModelSerializer):
         self.fields["workflow_id"] = serializers.CharField(allow_null=True, required=False)
         self.fields["platform_task_id"] = serializers.CharField(allow_null=True, required=False)
 
-
     def validate(self, data):
-
         return data

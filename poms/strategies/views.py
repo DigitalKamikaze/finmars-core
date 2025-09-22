@@ -4,11 +4,12 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from poms.common.filters import (
+    AbstractObjectStateFilter,
     AttributeFilter,
     CharFilter,
     EntitySpecificFilter,
     GroupsAttributeFilter,
-    NoOpFilter, AbstractObjectStateFilter,
+    NoOpFilter,
 )
 from poms.common.utils import get_list_of_entity_attributes
 from poms.common.views import AbstractModelViewSet

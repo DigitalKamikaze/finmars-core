@@ -25,13 +25,14 @@ from rest_framework.views import APIView
 
 from poms.common.authentication import get_access_token
 from poms.common.filters import (
+    AbstractObjectStateFilter,
     AttributeFilter,
     CharExactFilter,
     CharFilter,
     EntitySpecificFilter,
     GroupsAttributeFilter,
     ModelExtMultipleChoiceFilter,
-    NoOpFilter, AbstractObjectStateFilter,
+    NoOpFilter,
 )
 from poms.common.jwt import encode_with_jwt
 from poms.common.mixins import UpdateModelMixinExt

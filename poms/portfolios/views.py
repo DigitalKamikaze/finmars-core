@@ -11,13 +11,14 @@ from rest_framework.response import Response
 
 from poms.celery_tasks.models import CeleryTask
 from poms.common.filters import (
+    AbstractObjectStateFilter,
     AttributeFilter,
     CharExactFilter,
     CharFilter,
     EntitySpecificFilter,
     GroupsAttributeFilter,
     ModelExtUserCodeMultipleChoiceFilter,
-    NoOpFilter, AbstractObjectStateFilter,
+    NoOpFilter,
 )
 from poms.common.utils import get_list_of_entity_attributes
 from poms.common.views import AbstractClassModelViewSet, AbstractModelViewSet

@@ -2,19 +2,19 @@ import logging
 
 import django_filters
 from django.db.models import Q
-from django_filters.rest_framework import FilterSet
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from poms.common.filters import (
+    AbstractObjectStateFilter,
     AttributeFilter,
     CharExactFilter,
     CharFilter,
     EntitySpecificFilter,
     GroupsAttributeFilter,
     ModelExtMultipleChoiceFilter,
-    NoOpFilter, AbstractObjectStateFilter,
+    NoOpFilter,
 )
 from poms.common.views import AbstractModelViewSet
 from poms.currencies.constants import MAIN_CURRENCIES

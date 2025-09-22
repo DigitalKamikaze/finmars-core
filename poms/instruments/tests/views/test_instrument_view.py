@@ -4,7 +4,6 @@ from poms.common.common_base_test import BaseTestCase
 from poms.iam.models import ResourceGroup
 from poms.instruments.models import AccrualCalculationSchedule, Instrument
 from poms.instruments.tests.common_test_data import (
-    EXPECTED_INSTRUMENT,
     INSTRUMENT_CREATE_DATA,
 )
 from poms.users.models import Member

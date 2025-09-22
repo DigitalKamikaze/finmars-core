@@ -367,7 +367,10 @@ class ObjectStateModel(models.Model):
         null=True,
         blank=True,
         verbose_name=gettext_lazy("source user code"),
-        help_text=gettext_lazy("provider can have several sources available, e.g. Provider data_aggregator may have sources: bank1 and bank2"),
+        help_text=gettext_lazy(
+            "provider can have several sources available, e.g. "
+            "Provider data_aggregator may have sources: bank1 and bank2"
+        ),
     )
 
     source_version_semantic = models.CharField(
@@ -390,7 +393,11 @@ class ObjectStateModel(models.Model):
         default=dict,  # will create {}
         blank=True,
         verbose_name=gettext_lazy("reference_ids"),
-        help_text=gettext_lazy("json-like field for different key-value pairs identifying entity in different sources, e.g. instrument ids by standards (ISIN: xxx, FIGI: yyy) and by provider/source (bank1_id: xxx, provider1_id: yyy) can be used simultaneously")
+        help_text=gettext_lazy(
+            "json-like field for different key-value pairs identifying entity in different sources, "
+            "e.g. instrument ids by standards (ISIN: xxx, FIGI: yyy) and "
+            "by provider/source (bank1_id: xxx, provider1_id: yyy) can be used simultaneously"
+        ),
     )
 
     credential_user_code = models.CharField(
@@ -411,7 +418,7 @@ class ObjectStateModel(models.Model):
         default=dict,  # will create {}
         blank=True,
         verbose_name=gettext_lazy("platform version"),
-        help_text=gettext_lazy("Dictionary of platform services (service: MAJOR.MINOR.PATCH)")
+        help_text=gettext_lazy("Dictionary of platform services (service: MAJOR.MINOR.PATCH)"),
     )
 
     origin_initiator_code = models.CharField(
@@ -419,7 +426,7 @@ class ObjectStateModel(models.Model):
         null=True,
         blank=True,
         verbose_name=gettext_lazy("origin_initiator_code"),
-        help_text=gettext_lazy("user login (who is responsible for manual/scheduler/api call): john_doe")
+        help_text=gettext_lazy("user login (who is responsible for manual/scheduler/api call): john_doe"),
     )
 
     workflow_module_user_code = models.CharField(
@@ -427,7 +434,7 @@ class ObjectStateModel(models.Model):
         null=True,
         blank=True,
         verbose_name=gettext_lazy("workflow_module_user_code"),
-        help_text=gettext_lazy("workflow used for the data")
+        help_text=gettext_lazy("workflow used for the data"),
     )
 
     workflow_module_version_semantic = models.CharField(
@@ -443,7 +450,7 @@ class ObjectStateModel(models.Model):
         null=True,
         blank=True,
         verbose_name=gettext_lazy("workflow_id"),
-        help_text=gettext_lazy("id or uuid")
+        help_text=gettext_lazy("id or uuid"),
     )
 
     platform_task_id = models.CharField(
@@ -451,9 +458,8 @@ class ObjectStateModel(models.Model):
         null=True,
         blank=True,
         verbose_name=gettext_lazy("platform_task_id"),
-        help_text=gettext_lazy("platform task id")
+        help_text=gettext_lazy("platform task id"),
     )
-
 
     class Meta:
         abstract = True

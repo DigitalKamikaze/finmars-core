@@ -111,7 +111,7 @@ class AccountViewSetTest(BaseTestCase):
         response_json = response.json()
 
         self.assertGreater(response_json["count"], 0)  # default accounts in DB
-        default_account = response_json["results"][0]
+        # default_account = response_json["results"][0]
 
         # self.assertEqual(default_account.keys(), EXPECTED_ACCOUNT.keys())
 
