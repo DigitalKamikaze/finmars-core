@@ -2653,7 +2653,7 @@ class ManualPricingFormula(models.Model):
         return self.expr
 
 
-class AccrualCalculationSchedule(models.Model):
+class AccrualCalculationSchedule(ObjectStateModel):
     instrument = models.ForeignKey(
         Instrument,
         related_name="accrual_calculation_schedules",
@@ -2782,7 +2782,7 @@ class AccrualCalculationSchedule(models.Model):
         return str(self.accrual_start_date)
 
 
-class PriceHistory(TimeStampedModel):
+class PriceHistory(TimeStampedModel, ObjectStateModel):
     instrument = models.ForeignKey(
         Instrument,
         related_name="prices",
@@ -3034,7 +3034,7 @@ class PriceHistory(TimeStampedModel):
         super().save(*args, **kwargs)
 
 
-class InstrumentFactorSchedule(models.Model):
+class InstrumentFactorSchedule(ObjectStateModel):
     instrument = models.ForeignKey(
         Instrument,
         related_name="factor_schedules",

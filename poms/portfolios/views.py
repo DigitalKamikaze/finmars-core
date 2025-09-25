@@ -11,6 +11,7 @@ from rest_framework.response import Response
 
 from poms.celery_tasks.models import CeleryTask
 from poms.common.filters import (
+    AbstractObjectStateFilter,
     AttributeFilter,
     CharExactFilter,
     CharFilter,
@@ -187,7 +188,7 @@ class PortfolioClassifierViewSet(GenericClassifierViewSet):
     target_model = Portfolio
 
 
-class PortfolioFilterSet(FilterSet):
+class PortfolioFilterSet(AbstractObjectStateFilter):
     id = NoOpFilter()
     is_deleted = django_filters.BooleanFilter()
     user_code = CharFilter()
@@ -200,7 +201,7 @@ class PortfolioFilterSet(FilterSet):
 
     class Meta:
         model = Portfolio
-        fields = []
+        fields = AbstractObjectStateFilter.Meta.fields + []
 
 
 class PortfolioViewSet(AbstractModelViewSet):

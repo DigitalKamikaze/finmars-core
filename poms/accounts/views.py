@@ -10,6 +10,7 @@ from poms.accounts.serializers import (
     AccountTypeSerializer,
 )
 from poms.common.filters import (
+    AbstractObjectStateFilter,
     AttributeFilter,
     CharFilter,
     EntitySpecificFilter,
@@ -133,7 +134,7 @@ class AccountClassifierViewSet(GenericClassifierViewSet):
     target_model = Account
 
 
-class AccountFilterSet(FilterSet):
+class AccountFilterSet(AbstractObjectStateFilter):
     id = NoOpFilter()
     is_deleted = django_filters.BooleanFilter()
     user_code = CharFilter()
@@ -146,7 +147,7 @@ class AccountFilterSet(FilterSet):
 
     class Meta:
         model = Account
-        fields = []
+        fields = AbstractObjectStateFilter.Meta.fields + []
 
 
 class AccountViewSet(AbstractModelViewSet):

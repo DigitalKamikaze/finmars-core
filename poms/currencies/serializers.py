@@ -141,7 +141,7 @@ class CurrencyViewSerializer(ModelWithUserCodeSerializer):
         ]
 
 
-class CurrencyHistorySerializer(ModelMetaSerializer, ModelWithTimeStampSerializer):
+class CurrencyHistorySerializer(ModelMetaSerializer, ModelWithTimeStampSerializer, ModelWithObjectStateSerializer):
     currency = CurrencyField()
     currency_object = CurrencyViewSerializer(source="currency", read_only=True)
     pricing_policy = PricingPolicyField(allow_null=False)

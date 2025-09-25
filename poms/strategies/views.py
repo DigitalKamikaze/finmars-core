@@ -4,6 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from poms.common.filters import (
+    AbstractObjectStateFilter,
     AttributeFilter,
     CharFilter,
     EntitySpecificFilter,
@@ -110,7 +111,7 @@ class Strategy1SubgroupViewSet(AbstractModelViewSet):
     ]
 
 
-class Strategy1FilterSet(FilterSet):
+class Strategy1FilterSet(AbstractObjectStateFilter):
     id = NoOpFilter()
     is_deleted = django_filters.BooleanFilter()
     user_code = CharFilter()
@@ -120,7 +121,7 @@ class Strategy1FilterSet(FilterSet):
 
     class Meta:
         model = Strategy1
-        fields = []
+        fields = AbstractObjectStateFilter.Meta.fields + []
 
 
 class Strategy1AttributeTypeViewSet(GenericAttributeTypeViewSet):
@@ -249,7 +250,7 @@ class Strategy2AttributeTypeViewSet(GenericAttributeTypeViewSet):
 class Strategy2FilterSet(Strategy1FilterSet):
     class Meta:
         model = Strategy2
-        fields = []
+        fields = AbstractObjectStateFilter.Meta.fields + []
 
 
 class Strategy2ViewSet(Strategy1ViewSet):
@@ -354,7 +355,7 @@ class Strategy3AttributeTypeViewSet(GenericAttributeTypeViewSet):
 class Strategy3FilterSet(Strategy1FilterSet):
     class Meta:
         model = Strategy3
-        fields = []
+        fields = AbstractObjectStateFilter.Meta.fields + []
 
 
 class Strategy3ViewSet(Strategy1ViewSet):

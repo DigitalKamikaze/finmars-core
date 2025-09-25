@@ -182,7 +182,7 @@ class CurrencyHistoryManager(models.Manager):
         return history.fx_rate
 
 
-class CurrencyHistory(TimeStampedModel):
+class CurrencyHistory(TimeStampedModel, ObjectStateModel):
     """
     FX rate of Currencies for specific date
     Finmars is not bound to USD as base currency (Base Currency could be set in poms.users.EcosystemDefault)

@@ -1436,7 +1436,7 @@ class ManualPricingFormulaSerializer(serializers.ModelSerializer):
         fields = ["id", "pricing_policy", "pricing_policy_object", "expr", "notes"]
 
 
-class AccrualCalculationScheduleSerializer(serializers.ModelSerializer):
+class AccrualCalculationScheduleSerializer(ModelWithObjectStateSerializer):
     id = serializers.IntegerField(read_only=False, required=False, allow_null=True)
     accrual_calculation_model = AccrualCalculationModelField()
     accrual_calculation_model_object = AccrualCalculationModelSerializer(
@@ -1502,7 +1502,7 @@ class AccrualCalculationScheduleStandaloneSerializer(serializers.ModelSerializer
         return attrs
 
 
-class InstrumentFactorScheduleSerializer(serializers.ModelSerializer):
+class InstrumentFactorScheduleSerializer(ModelWithObjectStateSerializer):
     class Meta:
         model = InstrumentFactorSchedule
         fields = ["id", "effective_date", "factor_value"]
@@ -1640,7 +1640,7 @@ AUTOCALCULATE_ACTIONS = {
 }
 
 
-class PriceHistorySerializer(ModelMetaSerializer):
+class PriceHistorySerializer(ModelMetaSerializer, ModelWithObjectStateSerializer):
     instrument = InstrumentField()
     instrument_object = InstrumentViewSerializer(source="instrument", read_only=True)
     pricing_policy = PricingPolicyField(allow_null=False)
