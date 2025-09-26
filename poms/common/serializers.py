@@ -187,18 +187,29 @@ class ModelWithObjectStateSerializer(serializers.ModelSerializer):
         super().__init__(*args, **kwargs)
         self.fields["is_active"] = serializers.BooleanField(default=True, required=False)
         self.fields["actual_at"] = serializers.DateTimeField(allow_null=True, required=False)
-        self.fields["source_type"] = serializers.ChoiceField(
-            choices=("manual", "external"), default="manual", required=False
-        )
-        self.fields["source_origin"] = serializers.CharField(default="manual", required=False)
-        self.fields["external_id"] = serializers.CharField(allow_null=True, required=False)
+
         self.fields["is_manual_locked"] = serializers.BooleanField(default=False, required=False)
         self.fields["is_locked"] = serializers.BooleanField(default=True, required=False)
 
-    def validate(self, data):
-        if data.get("source_type", "manual") == "manual" and (
-            data.get("source_origin") and data["source_origin"] != "manual"
-        ):
-            raise serializers.ValidationError("Object is protected from external changes")
+        self.fields["reference_ids"] = serializers.JSONField(allow_null=True, required=False)
+        self.fields["attributes_extra"] = serializers.JSONField(allow_null=True, required=False)
 
+        self.fields["origin_initiator_type"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["origin_manual_entry_point"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["provider_user_code"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["provider_version_semantic"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["provider_version_calendar"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["source_user_code"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["source_version_semantic"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["source_version_calendar"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["credential_user_code"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["credential_version_integer"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["platform_version"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["origin_initiator_code"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["workflow_module_user_code"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["workflow_module_version_semantic"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["workflow_id"] = serializers.CharField(allow_null=True, required=False)
+        self.fields["platform_task_id"] = serializers.CharField(allow_null=True, required=False)
+
+    def validate(self, data):
         return data

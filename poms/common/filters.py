@@ -541,3 +541,166 @@ class FinmarsFilterBackend(DjangoFilterBackend):
                     parameter["schema"]["enum"] = [c[0] for c in field.extra["choices"]]
             parameters.append(parameter)
         return parameters
+
+
+def _coerce(raw: str):
+    s = raw.strip().lower()
+    if s == "true":
+        return True
+    if s == "false":
+        return False
+    if s in ("null", "none"):
+        return None
+    try:
+        if "." in s:
+            return float(s)
+        return int(s)
+    except ValueError:
+        return raw  # строка
+
+
+class ReferenceIdsParamFilterBackend(BaseFilterBackend):
+    """
+    Поддерживает query-параметры вида:
+      ?reference_ids.ISIN=US0378331005
+      ?reference_ids.bank.id=A123
+      ?reference_ids.some.flag=true
+    Делает точное сравнение по JSON-пути: reference_ids__bank__id="A123"
+    """
+
+    prefix = "reference_ids."
+
+    def filter_queryset(self, request, queryset, view):
+        mode = request.query_params.get("reference_ids_mode", "and").lower()
+        # допускаем только and/or
+        use_or = mode == "or"
+
+        q_total = Q()
+        first = True
+
+        for param in request.query_params:
+            if not param.startswith(self.prefix):
+                continue
+
+            path = param[len(self.prefix) :].split(".")
+            lookup = "reference_ids"
+            for key in path:
+                lookup += f"__{key}"
+
+            values = [_coerce(v) for v in request.query_params.getlist(param)]
+            q_or = Q()
+            for v in values:
+                q_or |= Q(**{lookup: v})
+
+            if first:
+                q_total = q_or
+                first = False
+            elif use_or:
+                q_total |= q_or
+            else:
+                q_total &= q_or
+
+        if not first:  # что-то накопили
+            queryset = queryset.filter(q_total)
+        return queryset
+
+
+class PlatformVersionParamFilterBackend(BaseFilterBackend):
+    """
+    Поддерживает query-параметры вида:
+      ?platform_version.ISIN=US0378331005
+      ?platform_version.bank.id=A123
+      ?platform_version.some.flag=true
+    Делает точное сравнение по JSON-пути: platform_version="A123"
+    """
+
+    prefix = "platform_version."
+
+    def filter_queryset(self, request, queryset, view):
+        mode = request.query_params.get("platform_version_mode", "and").lower()
+        # допускаем только and/or
+        use_or = mode == "or"
+
+        q_total = Q()
+        first = True
+
+        for param in request.query_params:
+            if not param.startswith(self.prefix):
+                continue
+
+            path = param[len(self.prefix) :].split(".")
+            lookup = "platform_version"
+            for key in path:
+                lookup += f"__{key}"
+
+            values = [_coerce(v) for v in request.query_params.getlist(param)]
+            q_or = Q()
+            for v in values:
+                q_or |= Q(**{lookup: v})
+
+            if first:
+                q_total = q_or
+                first = False
+            elif use_or:
+                q_total |= q_or
+            else:
+                q_total &= q_or
+
+        if not first:  # что-то накопили
+            queryset = queryset.filter(q_total)
+        return queryset
+
+
+class AbstractObjectStateFilter(FilterSet):
+    provider_user_code = CharFilter(lookup_expr="exact")
+    provider_version_semantic = CharFilter(lookup_expr="exact")
+    provider_version_calendar = CharFilter(lookup_expr="exact")
+
+    source_user_code = CharFilter(lookup_expr="exact")
+    source_version_semantic = CharFilter(lookup_expr="exact")
+    source_version_calendar = CharFilter(lookup_expr="exact")
+
+    credential_user_code = CharFilter(lookup_expr="exact")
+    credential_version_integer = CharFilter(lookup_expr="exact")
+
+    origin_initiator_type = CharFilter(lookup_expr="exact")
+    origin_manual_entry_point = CharFilter(lookup_expr="exact")
+    origin_initiator_code = CharFilter(lookup_expr="exact")
+
+    # reference_ids # look above
+    # platform_version # look above
+
+    actual_at = django_filters.IsoDateTimeFilter()
+    actual_at__gte = django_filters.IsoDateTimeFilter(field_name="actual_at", lookup_expr="gte")
+    actual_at__lte = django_filters.IsoDateTimeFilter(field_name="actual_at", lookup_expr="lte")
+
+    is_manual_locked = django_filters.BooleanFilter()
+
+    workflow_module_user_code = CharFilter(lookup_expr="exact")
+    workflow_module_version_semantic = CharFilter(lookup_expr="exact")
+    workflow_id = CharFilter(lookup_expr="exact")
+    platform_task_id = CharFilter(lookup_expr="exact")
+
+    class Meta:
+        model = None  # ← базовый класс, тут не указываем модель
+        fields = [
+            "provider_user_code",
+            "provider_version_semantic",
+            "provider_version_calendar",
+            "source_user_code",
+            "source_version_semantic",
+            "source_version_calendar",
+            "credential_user_code",
+            "credential_version_integer",
+            "origin_initiator_type",
+            "origin_manual_entry_point",
+            "origin_initiator_code",
+            "actual_at",
+            "actual_at__gte",
+            "actual_at__lte",
+            "is_manual_locked",
+            "workflow_module_user_code",
+            "workflow_module_version_semantic",
+            "workflow_id",
+            "platform_task_id",
+        ]

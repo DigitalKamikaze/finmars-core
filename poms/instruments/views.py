@@ -25,6 +25,7 @@ from rest_framework.views import APIView
 
 from poms.common.authentication import get_access_token
 from poms.common.filters import (
+    AbstractObjectStateFilter,
     AttributeFilter,
     CharExactFilter,
     CharFilter,
@@ -687,7 +688,7 @@ class InstrumentClassifierViewSet(GenericClassifierViewSet):
     target_model = Instrument
 
 
-class InstrumentFilterSet(FilterSet):
+class InstrumentFilterSet(AbstractObjectStateFilter):
     id = NoOpFilter()
     is_deleted = django_filters.BooleanFilter()
     user_code = CharFilter()
@@ -713,7 +714,7 @@ class InstrumentFilterSet(FilterSet):
 
     class Meta:
         model = Instrument
-        fields = []
+        fields = AbstractObjectStateFilter.Meta.fields + []
 
 
 class InstrumentViewSet(AbstractModelViewSet):
@@ -1548,7 +1549,7 @@ class InstrumentDatabaseSearchViewSet(APIView):
         return Response(result)
 
 
-class PriceHistoryFilterSet(FilterSet):
+class PriceHistoryFilterSet(AbstractObjectStateFilter):
     id = NoOpFilter()
     instrument = ModelExtMultipleChoiceFilter(model=Instrument, field_name="id")
     pricing_policy = CharFilter(field_name="pricing_policy__user_code", lookup_expr="icontains")
@@ -1558,7 +1559,7 @@ class PriceHistoryFilterSet(FilterSet):
 
     class Meta:
         model = PriceHistory
-        fields = []
+        fields = AbstractObjectStateFilter.Meta.fields + []
 
 
 class PriceHistoryViewSet(AbstractModelViewSet):
