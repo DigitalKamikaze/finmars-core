@@ -5,7 +5,6 @@ import logging
 from datetime import timedelta
 
 import pandas as pd
-
 # from django.conf import settings
 from django.contrib.admin.utils import NestedObjects
 from django.contrib.contenttypes.models import ContentType
@@ -800,10 +799,15 @@ def calculate_period_date(
 
     frequency = frequency if start else f"E{frequency}"
 
-    if "W" in frequency:
+    # Special handling for shift=0: should return start/end of current period
+    if shift == 0:
         input_date = calc_shift_date_map[frequency](input_date)
+    else:
+        # For non-zero shifts, apply transformation only for weekly frequencies (preserve original logic)
+        if "W" in frequency:
+            input_date = calc_shift_date_map[frequency](input_date)
 
-    input_date = input_date + frequency_map[frequency](shift)
+        input_date = input_date + frequency_map[frequency](shift)
 
     if is_only_bday and not is_business_day(input_date):
         if start:

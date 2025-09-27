@@ -110,6 +110,60 @@ class TestBusinessDayFunctions(SimpleTestCase):
             date = calculate_period_date(test_case[0], test_case[1], test_case[2], test_case[3], test_case[4])
             self.assertEqual(date, expected[i])
 
+    def test_get_calc_period_date_shift_zero(self):
+        """Tests for (shift=0) should return start/end of the period"""
+        test_cases = [
+            # Month
+            (datetime.date(2024, 9, 15), "M", 0, False, True),
+            (datetime.date(2024, 9, 15), "M", 0, False, False),
+            # Quarter
+            (datetime.date(2024, 2, 15), "Q", 0, False, True),
+            (datetime.date(2024, 2, 15), "Q", 0, False, False),
+            # Year
+            (datetime.date(2024, 6, 15), "Y", 0, False, True),
+            (datetime.date(2024, 6, 15), "Y", 0, False, False),
+            # Week
+            (datetime.date(2024, 9, 4), "W", 0, False, True),
+            (datetime.date(2024, 9, 4), "W", 0, False, False),
+            # Days
+            (datetime.date(2024, 9, 15), "D", 0, False, True),
+            (datetime.date(2024, 9, 15), "D", 0, False, False),
+        ]
+
+        expected = [
+            "2024-09-01",
+            "2024-09-30",
+            "2024-01-01",
+            "2024-03-31",
+            "2024-01-01",
+            "2024-12-31",
+            "2024-09-02",
+            "2024-09-08",
+            "2024-09-15",
+            "2024-09-15",
+        ]
+
+        for i, test_case in enumerate(test_cases):
+            with self.subTest(case=i, input=test_case):
+                date = calculate_period_date(test_case[0], test_case[1], test_case[2], test_case[3], test_case[4])
+                self.assertEqual(date, expected[i],
+                    f"Test case {i}: {test_case} expected {expected[i]}, got {date}")
+
+    def test_get_calc_period_date_edge_cases(self):
+        """Edge cases, weekends с business day adjustment"""
+        string_result = calculate_period_date("2024-09-15", "M", 1, False, True)
+        self.assertEqual(string_result, "2024-10-01")
+
+        custom_result = calculate_period_date(datetime.date(2024, 9, 15), "C", 5, True, True)
+        self.assertEqual(custom_result, "2024-09-15")
+
+        weekend_result = calculate_period_date(datetime.date(2024, 9, 7), "D", 0, True, True)
+        self.assertEqual(weekend_result, "2024-09-09")  # Monday
+
+        # Saturday 2024-09-07 end of day with business day should move to Friday
+        weekend_end_result = calculate_period_date(datetime.date(2024, 9, 7), "D", 0, True, False)
+        self.assertEqual(weekend_end_result, "2024-09-06")  # Friday
+
 
 class TestListDates(SimpleTestCase):
     def test_same_day(self):
