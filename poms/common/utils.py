@@ -785,7 +785,7 @@ def calculate_period_date(
     with the possibility of shifting forward or backward by several periods.
 
     :param input_date: A string in YYYY-MM-DD ISO format representing the current date.
-    :param frequency: "D" - (dayly) / "W" - (weekly) / "M" - (monthly) /
+    :param frequency: "D" - (daily) / "W" - (weekly) / "M" - (monthly) /
     "Q" - (quarterly) / "Y" - (yearly) / "C" - (custom - without changes).
     :param shift: Indicating how many periods to shift (-N for backward, +N for forward).
     :param is_only_bday: Whether to adjust the dates to business days.

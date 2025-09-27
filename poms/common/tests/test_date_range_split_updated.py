@@ -246,7 +246,7 @@ def split_date_range_list(
         return "error", f"date_to ({date_to}) < date_from ({date_from})", None
 
     if date_from == date_to:
-        if period_type in ["daily", "custom"]:
+        if period_type in {"daily", "custom"}:
             return (
                 "success",
                 None,
