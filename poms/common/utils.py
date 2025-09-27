@@ -799,7 +799,7 @@ def calculate_period_date(
 
     frequency = frequency if start else f"E{frequency}"
 
-    # Special handling for shift=0: should return start/end of current period
+    # Special handling for shift=0: should return start/end of the current period
     if shift == 0:
         input_date = calc_shift_date_map[frequency](input_date)
     else:
