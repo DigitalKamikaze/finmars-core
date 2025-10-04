@@ -16,9 +16,15 @@ from poms_app import settings
 
 _l = logging.getLogger("poms.common")
 
-VALID_FREQUENCY = {"D", "W", "M", "Q", "Y", "C"}
-FORWARD = 1
-
+VALID_FREQUENCY = {
+    "D",  # Daily
+    "W",  # Weekly
+    "M",  # Monthly
+    "Q",  # Quarterly
+    "HY", # Half-Yearly (1st or 2nd half of the calendar year)
+    "Y",  # Yearly
+    "C",  # Custom period - no changes
+}
 calc_shift_date_map = {
     "D": lambda day: pd.Timestamp(day),
     "W": lambda day: pd.Timestamp(day) - pd.DateOffset(days=day.weekday()),
@@ -620,7 +626,7 @@ def get_last_business_day_in_previous_quarter(date):
 
 
 def shift_to_bday(date, shift):
-    shift = FORWARD if shift > 0 else -1
+    shift = 1 if shift > 0 else -1
     while not is_business_day(date):
         date += datetime.timedelta(days=shift)
 
