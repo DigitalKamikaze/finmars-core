@@ -722,6 +722,8 @@ def pick_dates_from_range(
     start: bool,
 ) -> list[str]:
     """
+    Generates a list of dates from a range with a given frequency.
+    
     :param start_date: Start date in YYYY-MM-DD format.
     :param end_date: End date in YYYY-MM-DD format.
     :param frequency: "D" - (daily) / "W" - (weekly) / "M" - (monthly) /
@@ -730,11 +732,23 @@ def pick_dates_from_range(
     :param start: The beginning of frequency, if False, then end of frequency.
     :return: A list, containing the start or end of each frequency.
     """
+    # Validate frequency
+    if frequency not in VALID_FREQUENCY:
+        raise ValueError(f"Invalid frequency '{frequency}'. Valid options: {VALID_FREQUENCY}")
+
+    # Handle "C" frequency - return dates as strings
     if frequency == "C":
-        return [start_date, end_date]
+        start_str = start_date if isinstance(start_date, str) else start_date.strftime(settings.API_DATE_FORMAT)
+        end_str = end_date if isinstance(end_date, str) else end_date.strftime(settings.API_DATE_FORMAT)
+        return [start_str, end_str]
 
     start_date = get_validated_date(start_date)
     end_date = get_validated_date(end_date)
+
+    # Validate date range
+    if start_date > end_date:
+        raise ValueError(f"start_date ({start_date}) must be less than or equal to end_date ({end_date})")
+
     frequency = frequency if start else f"E{frequency}"
 
     dates = pd.date_range(start=start_date, end=end_date, freq=frequency_map[frequency]())
@@ -745,7 +759,8 @@ def pick_dates_from_range(
         return []
 
     # pd.date_range - adds dates that fall completely within
-    # the frequency. Adding in list uneven areas of date
+    # the frequency range. Adding dates from incomplete periods at the start/end
+    # the frequency. Adding in the list uneven areas of date
     if start and start_date != dates[0]:
         dates.insert(0, start_date)
     if not start and end_date != dates[-1]:
@@ -757,10 +772,12 @@ def pick_dates_from_range(
             day = shift_to_week_boundary(day, start_date, end_date, start, frequency)  # noqa: PLW2901
 
         if is_only_bday:
+            # For daily frequency, skip non-business days entirely
             if "D" in frequency and not is_business_day(day):
                 continue
 
-            if not is_business_day(day):
+            # For other frequencies, shift to the nearest business day
+            if "D" not in frequency and not is_business_day(day):
                 if start:
                     day = shift_to_bday(day, 1)  # noqa: PLW2901
                 else:

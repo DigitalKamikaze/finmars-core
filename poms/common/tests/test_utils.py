@@ -83,6 +83,168 @@ class TestBusinessDayFunctions(SimpleTestCase):
             dates = pick_dates_from_range(test_case[0], test_case[1], test_case[2], test_case[3], test_case[4])
             self.assertEqual(dates, expected[i])
 
+
+class TestPicDatesFromRange(SimpleTestCase):
+
+    def test_pick_dates_from_range_custom_frequency(self):
+        """Тест для частоты 'C' (custom) - должна возвращать только начальную и конечную даты"""
+        # Test with date objects
+        result = pick_dates_from_range(
+            datetime.date(2024, 1, 15),
+            datetime.date(2024, 3, 20),
+            "C",
+            False,
+            True
+        )
+        self.assertEqual(result, ["2024-01-15", "2024-03-20"])
+
+        # Test with string dates
+        result = pick_dates_from_range(
+            "2024-01-15",
+            "2024-03-20",
+            "C",
+            False,
+            True
+        )
+        self.assertEqual(result, ["2024-01-15", "2024-03-20"])
+
+        # Test with mixed types
+        result = pick_dates_from_range(
+            datetime.date(2024, 1, 15),
+            "2024-03-20",
+            "C",
+            True,
+            False
+        )
+        self.assertEqual(result, ["2024-01-15", "2024-03-20"])
+
+    def test_pick_dates_from_range_invalid_frequency(self):
+        """Тест на невалидную частоту - должен выбросить ValueError"""
+        with self.assertRaises(ValueError) as context:
+            pick_dates_from_range(
+                datetime.date(2024, 1, 1),
+                datetime.date(2024, 12, 31),
+                "X",  # Invalid frequency
+                False,
+                True
+            )
+        self.assertIn("Invalid frequency", str(context.exception))
+
+    def test_pick_dates_from_range_invalid_date_order(self):
+        """Тест на неправильный порядок дат - start_date > end_date"""
+        with self.assertRaises(ValueError) as context:
+            pick_dates_from_range(
+                datetime.date(2024, 12, 31),
+                datetime.date(2024, 1, 1),
+                "M",
+                False,
+                True
+            )
+        self.assertIn("must be less than or equal to", str(context.exception))
+
+    def test_pick_dates_from_range_same_date(self):
+        """Тест когда start_date == end_date"""
+        result = pick_dates_from_range(
+            datetime.date(2024, 6, 15),
+            datetime.date(2024, 6, 15),
+            "D",
+            False,
+            True
+        )
+        # Should return the single date
+        self.assertEqual(result, ["2024-06-15"])
+
+    def test_pick_dates_from_range_weekend_handling(self):
+        """Тест обработки выходных дней с is_only_bday=True"""
+        # Saturday to Sunday range with daily frequency
+        # 2024-09-07 is Saturday, 2024-09-08 is Sunday
+        result = pick_dates_from_range(
+            datetime.date(2024, 9, 7),
+            datetime.date(2024, 9, 8),
+            "D",
+            True,  # Only business days
+            True
+        )
+        # Should return empty list as both are weekends
+        self.assertEqual(result, [])
+
+        # Friday to Monday with daily frequency
+        result = pick_dates_from_range(
+            datetime.date(2024, 9, 6),  # Friday
+            datetime.date(2024, 9, 9),  # Monday
+            "D",
+            True,
+            True
+        )
+        # Should return only Friday and Monday
+        self.assertEqual(result, ["2024-09-06", "2024-09-09"])
+
+    def test_pick_dates_from_range_monthly_weekend_adjustment(self):
+        """Тест корректировки месячных дат, попадающих на выходные"""
+        # If month start/end falls on weekend, should shift to business day
+        # 2024-06-01 is Saturday
+        result = pick_dates_from_range(
+            datetime.date(2024, 6, 1),  # Saturday
+            datetime.date(2024, 8, 31),
+            "M",
+            True,  # Adjust to business days
+            True  # Start of month
+        )
+        # June 1 (Sat) should shift to June 3 (Mon)
+        self.assertIn("2024-06-03", result)
+
+    def test_pick_dates_from_range_string_input(self):
+        """Тест с входными данными в виде строк"""
+        result = pick_dates_from_range(
+            "2024-01-01",
+            "2024-03-31",
+            "M",
+            False,
+            True
+        )
+        self.assertEqual(result, ["2024-01-01", "2024-02-01", "2024-03-01"])
+
+    def test_pick_dates_from_range_empty_result(self):
+        """Тест случая, когда pd.date_range возвращает пустой список"""
+        # Very short range that doesn't contain full period
+        result = pick_dates_from_range(
+            datetime.date(2024, 1, 2),
+            datetime.date(2024, 1, 3),
+            "Y",  # Yearly frequency
+            False,
+            False  # End of year
+        )
+        # Should return empty list as range doesn't contain full year
+        self.assertEqual(result, [])
+
+    def test_pick_dates_from_range_no_duplicates(self):
+        """Тест что в результате нет дубликатов дат"""
+        result = pick_dates_from_range(
+            datetime.date(2024, 1, 1),
+            datetime.date(2024, 12, 31),
+            "Q",
+            False,
+            True
+        )
+        # Check no duplicates
+        self.assertEqual(len(result), len(set(result)))
+
+    def test_pick_dates_from_range_quarterly_business_days(self):
+        """Тест квартальной частоты с корректировкой на рабочие дни"""
+        result = pick_dates_from_range(
+            datetime.date(2024, 1, 1),
+            datetime.date(2024, 12, 31),
+            "Q",
+            True,  # Only business days
+            True  # Start of quarter
+        )
+        # All dates should be business days
+        for date_str in result:
+            date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+            self.assertTrue(date_obj.weekday() < 5, f"{date_str} is not a business day")
+
+
+class TestCalcPeriodDate(SimpleTestCase):
     def test_get_calc_period_date(self):
         test_cases = [
             (datetime.date(2024, 12, 1), "M", -3, False, False),
@@ -147,7 +309,7 @@ class TestBusinessDayFunctions(SimpleTestCase):
             with self.subTest(case=i, input=test_case):
                 date = calculate_period_date(test_case[0], test_case[1], test_case[2], test_case[3], test_case[4])
                 self.assertEqual(date, expected[i],
-                    f"Test case {i}: {test_case} expected {expected[i]}, got {date}")
+                                 f"Test case {i}: {test_case} expected {expected[i]}, got {date}")
 
     def test_get_calc_period_date_edge_cases(self):
         """Edge cases, weekends с business day adjustment"""
