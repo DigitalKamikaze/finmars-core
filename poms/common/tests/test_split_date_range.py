@@ -235,6 +235,49 @@ class TestSplitDateRange(SimpleTestCase):
                     ("2024-01-01", "2024-12-31")  # Full 2024
                 ],
             ],
+            # Half-yearly - full year
+            [
+                "2024-01-01",
+                "2024-12-31",
+                "HY",
+                False,
+                [
+                    ("2024-01-01", "2024-06-30"),  # H1
+                    ("2024-07-01", "2024-12-31"),  # H2
+                ],
+            ],
+            # Half-yearly - partial year starting mid-H1
+            [
+                "2024-03-15",
+                "2024-10-20",
+                "HY",
+                False,
+                [
+                    ("2024-01-01", "2024-06-30"),  # Full H1
+                    ("2024-07-01", "2024-12-31"),  # Full H2
+                ],
+            ],
+            # Half-yearly - only first half
+            [
+                "2024-02-01",
+                "2024-05-31",
+                "HY",
+                False,
+                [
+                    ("2024-01-01", "2024-06-30")  # H1 only
+                ],
+            ],
+            # Half-yearly with business days
+            [
+                "2024-01-01",
+                "2024-12-31",
+                "HY",
+                True,
+                [
+                    ("2024-01-01", "2024-06-28"),  # H1 with business day adjustment
+                    ("2024-07-01", "2024-12-31"),  # H2 with business day adjustment
+                ],
+            ],
             # Custom frequency (no splitting)
             [
                 "2024-01-01",
@@ -386,3 +429,215 @@ class TestSplitDateRange(SimpleTestCase):
             dates,
             [("2024-09-16", "2024-09-20"), ("2024-09-23", "2024-09-27"), ("2024-09-30", "2024-10-04")],
         )
+
+    def test_half_yearly_frequency(self):
+        test_cases = [
+            # Full year - both halves
+            (
+                datetime.date(2024, 1, 1),
+                datetime.date(2024, 12, 31),
+                "HY",
+                False,
+                [
+                    ("2024-01-01", "2024-06-30"),  # First half (H1)
+                    ("2024-07-01", "2024-12-31"),  # Second half (H2)
+                ],
+            ),
+            # Multiple years
+            (
+                datetime.date(2023, 1, 1),
+                datetime.date(2024, 12, 31),
+                "HY",
+                False,
+                [
+                    ("2023-01-01", "2023-06-30"),  # 2023 H1
+                    ("2023-07-01", "2023-12-31"),  # 2023 H2
+                    ("2024-01-01", "2024-06-30"),  # 2024 H1
+                    ("2024-07-01", "2024-12-31"),  # 2024 H2
+                ],
+            ),
+            # Starting mid-first half
+            (
+                datetime.date(2024, 3, 15),
+                datetime.date(2024, 12, 31),
+                "HY",
+                False,
+                [
+                    ("2024-01-01", "2024-06-30"),  # Full H1
+                    ("2024-07-01", "2024-12-31"),  # Full H2
+                ],
+            ),
+            # Starting mid-second half
+            (
+                datetime.date(2024, 9, 15),
+                datetime.date(2025, 3, 31),
+                "HY",
+                False,
+                [
+                    ("2024-07-01", "2024-12-31"),  # 2024 H2
+                    ("2025-01-01", "2025-06-30"),  # 2025 H1
+                ],
+            ),
+            # Only first half
+            (
+                datetime.date(2024, 1, 1),
+                datetime.date(2024, 6, 30),
+                "HY",
+                False,
+                [
+                    ("2024-01-01", "2024-06-30"),  # H1 only
+                ],
+            ),
+            # Only second half
+            (
+                datetime.date(2024, 7, 1),
+                datetime.date(2024, 12, 31),
+                "HY",
+                False,
+                [
+                    ("2024-07-01", "2024-12-31"),  # H2 only
+                ],
+            ),
+            # Partial first half
+            (
+                datetime.date(2024, 2, 15),
+                datetime.date(2024, 5, 20),
+                "HY",
+                False,
+                [
+                    ("2024-01-01", "2024-06-30"),  # Full H1
+                ],
+            ),
+            # Partial second half
+            (
+                datetime.date(2024, 8, 10),
+                datetime.date(2024, 11, 15),
+                "HY",
+                False,
+                [
+                    ("2024-07-01", "2024-12-31"),  # Full H2
+                ],
+            ),
+            # Crossing half-year boundary
+            (
+                datetime.date(2024, 5, 1),
+                datetime.date(2024, 8, 31),
+                "HY",
+                False,
+                [
+                    ("2024-01-01", "2024-06-30"),  # H1
+                    ("2024-07-01", "2024-12-31"),  # H2
+                ],
+            ),
+            # String dates - full year
+            (
+                "2024-01-01",
+                "2024-12-31",
+                "HY",
+                False,
+                [
+                    ("2024-01-01", "2024-06-30"),
+                    ("2024-07-01", "2024-12-31"),
+                ],
+            ),
+            # Leap year - checking February 29
+            (
+                datetime.date(2024, 2, 29),
+                datetime.date(2024, 12, 31),
+                "HY",
+                False,
+                [
+                    ("2024-01-01", "2024-06-30"),
+                    ("2024-07-01", "2024-12-31"),
+                ],
+            ),
+            # Non-leap year
+            (
+                datetime.date(2023, 2, 28),
+                datetime.date(2023, 12, 31),
+                "HY",
+                False,
+                [
+                    ("2023-01-01", "2023-06-30"),
+                    ("2023-07-01", "2023-12-31"),
+                ],
+            ),
+            # Three years span
+            (
+                datetime.date(2022, 6, 15),
+                datetime.date(2024, 7, 15),
+                "HY",
+                False,
+                [
+                    ("2022-01-01", "2022-06-30"),  # 2022 H1
+                    ("2022-07-01", "2022-12-31"),  # 2022 H2
+                    ("2023-01-01", "2023-06-30"),  # 2023 H1
+                    ("2023-07-01", "2023-12-31"),  # 2023 H2
+                    ("2024-01-01", "2024-06-30"),  # 2024 H1
+                    ("2024-07-01", "2024-12-31"),  # 2024 H2
+                ],
+            ),
+        ]
+
+        for start, end, freq, is_bday, expected in test_cases:
+            with self.subTest(start=start, end=end, freq=freq, is_bday=is_bday):
+                result = split_date_range(start, end, freq, is_bday)
+                self.assertEqual(result, expected)
+
+    def test_half_yearly_with_business_days(self):
+        """Тесты для полугодовой частоты с учетом рабочих дней"""
+        test_cases = [
+            # Full year with business days
+            # 2024-01-01 is Monday, and 2024-06-30 is Sunday, and 2024-07-01 is Monday, but 2024-12-31 is Tuesday
+            (
+                datetime.date(2024, 1, 1),
+                datetime.date(2024, 12, 31),
+                "HY",
+                True,
+                [
+                    ("2024-01-01", "2024-06-28"),  # H1: Mon to Fri (Jun 30 is Sun, so Jun 28 is last Fri)
+                    ("2024-07-01", "2024-12-31"),  # H2: Mon to Tue
+                ],
+            ),
+            # Starting on weekend
+            # 2024-01-06 is Saturday
+            (
+                datetime.date(2024, 1, 6),
+                datetime.date(2024, 12, 31),
+                "HY",
+                True,
+                [
+                    ("2024-01-01", "2024-06-28"),  # H1 adjusted to business days
+                    ("2024-07-01", "2024-12-31"),  # H2 adjusted to business days
+                ],
+            ),
+            # Ending on weekend
+            # 2024-06-29 is Saturday, 2024-06-30 is Sunday
+            (
+                datetime.date(2024, 1, 1),
+                datetime.date(2024, 6, 30),
+                "HY",
+                True,
+                [
+                    ("2024-01-01", "2024-06-28"),  # H1: adjusted to last business day (Friday)
+                ],
+            ),
+            # Multiple years with business days
+            (
+                datetime.date(2023, 1, 1),
+                datetime.date(2024, 12, 31),
+                "HY",
+                True,
+                [
+                    ("2023-01-02", "2023-06-30"),  # 2023 H1: Jan 1 is Sun, so start on Jan 2 (Mon)
+                    ("2023-07-03", "2023-12-29"),  # 2023 H2: Jul 1 is Sat, Dec 31 is Sun
+                    ("2024-01-01", "2024-06-28"),  # 2024 H1
+                    ("2024-07-01", "2024-12-31"),  # 2024 H2
+                ],
+            ),
+        ]
+
+        for start, end, freq, is_bday, expected in test_cases:
+            with self.subTest(start=start, end=end, freq=freq, is_bday=is_bday):
+                result = split_date_range(start, end, freq, is_bday)
+                self.assertEqual(result, expected)

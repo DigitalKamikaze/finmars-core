@@ -651,8 +651,8 @@ def split_date_range(
 
     :param start_date: Start date in YYYY-MM-DD format (string) or datetime.date object
     :param end_date: End date in YYYY-MM-DD format (string) or datetime.date object
-    :param frequency: "D" - (daily) / "W" - (weekly) / "M" - (monthly) /
-    "Q" - (quarterly) / "Y" - (yearly) / "C" - (custom - without changes).
+    :param frequency: "D" - (daily) / "W" - (weekly) / "M" - (monthly) / "Q" - (quarterly) /
+                      "HY" - (half-yearly) / "Y" - (yearly) / "C" - (custom).
     :param is_only_bday: Whether to adjust the dates to business days.
     :return: A list of string tuples, each containing the start and end of a period.
     """
@@ -736,8 +736,8 @@ def pick_dates_from_range(
     
     :param start_date: Start date in YYYY-MM-DD format.
     :param end_date: End date in YYYY-MM-DD format.
-    :param frequency: "D" - (daily) / "W" - (weekly) / "M" - (monthly) /
-    "Q" - (quarterly) / "Y" - (yearly) / "C" - (custom - without changes).
+    :param frequency: "D" - (daily) / "W" - (weekly) / "M" - (monthly) / "Q" - (quarterly) /
+                      "HY" - (half-yearly) / "Y" - (yearly) / "C" - (custom).
     :param is_only_bday: Whether to adjust the dates to business days.
     :param start: The beginning of frequency, if False, then end of frequency.
     :return: A list, containing the start or end of each frequency.
