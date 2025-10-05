@@ -243,6 +243,250 @@ class TestPicDatesFromRange(SimpleTestCase):
             date_obj = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
             self.assertTrue(date_obj.weekday() < 5, f"{date_str} is not a business day")
 
+    def test_pick_dates_from_range_half_yearly_start(self):
+        """Test half-yearly frequency - start of half-year periods"""
+        # Full year - both halves
+        result = pick_dates_from_range(
+            datetime.date(2024, 1, 1),
+            datetime.date(2024, 12, 31),
+            "HY",
+            False,
+            True  # Start of half-year
+        )
+        self.assertEqual(result, ["2024-01-01", "2024-07-01"])
+
+        # Multiple years
+        result = pick_dates_from_range(
+            datetime.date(2023, 1, 1),
+            datetime.date(2024, 12, 31),
+            "HY",
+            False,
+            True
+        )
+        self.assertEqual(result, ["2023-01-01", "2023-07-01", "2024-01-01", "2024-07-01"])
+
+        # Starting mid-first half
+        result = pick_dates_from_range(
+            datetime.date(2024, 3, 15),
+            datetime.date(2024, 12, 31),
+            "HY",
+            False,
+            True
+        )
+        self.assertEqual(result, ["2024-03-15", "2024-07-01"])
+
+        # Starting mid-second half
+        result = pick_dates_from_range(
+            datetime.date(2024, 9, 15),
+            datetime.date(2025, 6, 30),
+            "HY",
+            False,
+            True
+        )
+        self.assertEqual(result, ["2024-09-15", "2025-01-01"])
+
+        # Only first half
+        result = pick_dates_from_range(
+            datetime.date(2024, 1, 1),
+            datetime.date(2024, 6, 30),
+            "HY",
+            False,
+            True
+        )
+        self.assertEqual(result, ["2024-01-01"])
+
+        # Only second half
+        result = pick_dates_from_range(
+            datetime.date(2024, 7, 1),
+            datetime.date(2024, 12, 31),
+            "HY",
+            False,
+            True
+        )
+        self.assertEqual(result, ["2024-07-01"])
+
+    def test_pick_dates_from_range_half_yearly_end(self):
+        """Test half-yearly frequency - end of half-year periods"""
+        # Full year - both halves
+        result = pick_dates_from_range(
+            datetime.date(2024, 1, 1),
+            datetime.date(2024, 12, 31),
+            "HY",
+            False,
+            False  # End of half-year
+        )
+        self.assertEqual(result, ["2024-06-30", "2024-12-31"])
+
+        # Multiple years
+        result = pick_dates_from_range(
+            datetime.date(2023, 1, 1),
+            datetime.date(2024, 12, 31),
+            "HY",
+            False,
+            False
+        )
+        self.assertEqual(result, ["2023-06-30", "2023-12-31", "2024-06-30", "2024-12-31"])
+
+        # Partial first half
+        result = pick_dates_from_range(
+            datetime.date(2024, 2, 15),
+            datetime.date(2024, 12, 31),
+            "HY",
+            False,
+            False
+        )
+        self.assertEqual(result, ["2024-06-30", "2024-12-31"])
+
+        # Partial second half
+        result = pick_dates_from_range(
+            datetime.date(2024, 8, 15),
+            datetime.date(2025, 3, 31),
+            "HY",
+            False,
+            False
+        )
+        self.assertEqual(result, ["2024-12-31", "2025-03-31"])
+
+        # Crossing half-year boundary
+        result = pick_dates_from_range(
+            datetime.date(2024, 5, 1),
+            datetime.date(2024, 8, 31),
+            "HY",
+            False,
+            False
+        )
+        self.assertEqual(result, ["2024-06-30", "2024-08-31"])
+
+    def test_pick_dates_from_range_half_yearly_with_business_days(self):
+        """Test half-yearly frequency with business day adjustments"""
+        # Full year with business days - start of half-year
+        # 2024-01-01 is Monday, 2024-07-01 is Monday
+        result = pick_dates_from_range(
+            datetime.date(2024, 1, 1),
+            datetime.date(2024, 12, 31),
+            "HY",
+            True,  # Only business days
+            True  # Start of half-year
+        )
+        self.assertEqual(result, ["2024-01-01", "2024-07-01"])
+
+        # Full year with business days - end of half-year
+        # 2024-06-30 is Sunday, should shift to 2024-06-28 (Friday)
+        # 2024-12-31 is Tuesday
+        result = pick_dates_from_range(
+            datetime.date(2024, 1, 1),
+            datetime.date(2024, 12, 31),
+            "HY",
+            True,
+            False  # End of half-year
+        )
+        self.assertEqual(result, ["2024-06-28", "2024-12-31"])
+
+        # Starting on weekend - 2024-06-01 is Saturday
+        result = pick_dates_from_range(
+            datetime.date(2024, 6, 1),  # Saturday
+            datetime.date(2024, 12, 31),
+            "HY",
+            True,
+            True
+        )
+        # Should include adjusted start date and July 1
+        self.assertIn("2024-06-03", result)  # Monday
+        self.assertIn("2024-07-01", result)
+
+        # Multiple years with business day adjustment
+        result = pick_dates_from_range(
+            datetime.date(2023, 1, 1),  # Sunday
+            datetime.date(2024, 12, 31),
+            "HY",
+            True,
+            True
+        )
+        # 2023-01-01 is Sunday, should shift to 2023-01-02 (Monday)
+        self.assertIn("2023-01-02", result)
+        self.assertIn("2023-07-03", result)  # 2023-07-01 is Saturday, shifts to Monday
+        self.assertIn("2024-01-01", result)  # Monday
+        self.assertIn("2024-07-01", result)  # Monday
+
+    def test_pick_dates_from_range_half_yearly_string_input(self):
+        """Test half-yearly frequency with string date inputs"""
+        result = pick_dates_from_range(
+            "2024-01-01",
+            "2024-12-31",
+            "HY",
+            False,
+            True
+        )
+        self.assertEqual(result, ["2024-01-01", "2024-07-01"])
+
+        result = pick_dates_from_range(
+            "2024-01-01",
+            "2024-12-31",
+            "HY",
+            False,
+            False
+        )
+        self.assertEqual(result, ["2024-06-30", "2024-12-31"])
+
+    def test_pick_dates_from_range_half_yearly_leap_year(self):
+        """Test half-yearly frequency with leap year"""
+        # 2024 is a leap year
+        result = pick_dates_from_range(
+            datetime.date(2024, 2, 29),  # Leap day
+            datetime.date(2024, 12, 31),
+            "HY",
+            False,
+            True
+        )
+        self.assertEqual(result, ["2024-02-29", "2024-07-01"])
+
+        result = pick_dates_from_range(
+            datetime.date(2024, 1, 1),
+            datetime.date(2024, 12, 31),
+            "HY",
+            False,
+            False
+        )
+        # June 30 should be included (leap year doesn't affect this)
+        self.assertEqual(result, ["2024-06-30", "2024-12-31"])
+
+    def test_pick_dates_from_range_half_yearly_edge_cases(self):
+        """Test half-yearly frequency edge cases"""
+        # Exactly one half-year period
+        result = pick_dates_from_range(
+            datetime.date(2024, 1, 1),
+            datetime.date(2024, 6, 30),
+            "HY",
+            False,
+            True
+        )
+        self.assertEqual(result, ["2024-01-01"])
+
+        # Very short range within one half
+        result = pick_dates_from_range(
+            datetime.date(2024, 2, 1),
+            datetime.date(2024, 2, 28),
+            "HY",
+            False,
+            False
+        )
+        # Should return empty list as no complete half-year period exists in this range
+        self.assertEqual(result, [])
+
+        # Three years span
+        result = pick_dates_from_range(
+            datetime.date(2022, 1, 1),
+            datetime.date(2024, 12, 31),
+            "HY",
+            False,
+            True
+        )
+        self.assertEqual(result, [
+            "2022-01-01", "2022-07-01",
+            "2023-01-01", "2023-07-01",
+            "2024-01-01", "2024-07-01"
+        ])
+
 
 class TestCalcPeriodDate(SimpleTestCase):
     def test_get_calc_period_date(self):

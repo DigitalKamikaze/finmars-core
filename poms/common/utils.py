@@ -759,27 +759,37 @@ def pick_dates_from_range(
     if start_date > end_date:
         raise ValueError(f"start_date ({start_date}) must be less than or equal to end_date ({end_date})")
 
+    # Preserve the original start_date for incomplete period handling
+    original_start_date = start_date
+    
     frequency = frequency if start else f"E{frequency}"
 
-    dates = pd.date_range(start=start_date, end=end_date, freq=frequency_map[frequency]())
+    # Align the start_date to the period boundary for proper date range generation
+    # Skip alignment for weekly frequency as it has special handling via shift_to_week_boundary
+    if "W" not in frequency:
+        aligned_start_date = calc_shift_date_map[frequency](start_date)
+    else:
+        aligned_start_date = start_date
+    
+    dates = pd.date_range(start=aligned_start_date, end=end_date, freq=frequency_map[frequency]())
     dates = [d.date() for d in dates]
 
-    # don't meets conditions
-    if not dates:
-        return []
-
+    # Filter out dates that are before the original start date
+    dates = [d for d in dates if d >= original_start_date]
+    
     # pd.date_range - adds dates that fall completely within
     # the frequency range. Adding dates from incomplete periods at the start/end
     # the frequency. Adding in the list uneven areas of date
-    if start and start_date != dates[0]:
-        dates.insert(0, start_date)
-    if not start and end_date != dates[-1]:
-        dates.append(end_date)
+    if dates:
+        if start and original_start_date != dates[0]:
+            dates.insert(0, original_start_date)
+        if not start and end_date != dates[-1]:
+            dates.append(end_date)
 
     pick_dates: list[str] = []
     for day in dates:
         if "W" in frequency:
-            day = shift_to_week_boundary(day, start_date, end_date, start, frequency)  # noqa: PLW2901
+            day = shift_to_week_boundary(day, original_start_date, end_date, start, frequency)  # noqa: PLW2901
 
         if is_only_bday:
             # For daily frequency, skip non-business days entirely
@@ -812,14 +822,18 @@ def calculate_period_date(
     with the possibility of shifting forward or backward by several periods.
 
     :param input_date: A string in YYYY-MM-DD ISO format representing the current date.
-    :param frequency: "D" - (daily) / "W" - (weekly) / "M" - (monthly) /
-    "Q" - (quarterly) / "Y" - (yearly) / "C" - (custom - without changes).
+    :param frequency: "D" - (daily) / "W" - (weekly) / "M" - (monthly) / "Q" - (quarterly) /
+                      "HY" - (half-yearly) / "Y" - (yearly) / "C" - (custom).
     :param shift: Indicating how many periods to shift (-N for backward, +N for forward).
     :param is_only_bday: Whether to adjust the dates to business days.
     :param start: The beginning of frequency, if False, then end of frequency.
     :return: The calculated date in YYYY-MM-DD format.
     """
     input_date: datetime.date = get_validated_date(input_date)
+
+    # Validate frequency
+    if frequency not in VALID_FREQUENCY:
+        raise ValueError(f"Invalid frequency '{frequency}'. Valid options: {VALID_FREQUENCY}")
 
     if frequency == "C":
         return input_date.strftime(settings.API_DATE_FORMAT)
