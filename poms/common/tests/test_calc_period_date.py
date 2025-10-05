@@ -481,6 +481,107 @@ def calc_period_date_test():
 
             "expected_res": datetime(2022, 3, 31).strftime("%Y-%m-%d"),
         },
+        # Half-yearly (HY) tests derived from Sergey's hytd cases
+        {
+            "test_num": 40,
+            "input_date": datetime(2024, 9, 7).strftime("%Y-%m-%d"),
+            "frequency": "HY",
+            "shift": 0,
+            "start": True,
+            "is_only_bday": False,
+
+            "expected_res": datetime(2024, 7, 1).strftime("%Y-%m-%d"),
+        },
+        {
+            "test_num": 41,
+            "input_date": datetime(2024, 9, 7).strftime("%Y-%m-%d"),
+            "frequency": "HY",
+            "shift": 0,
+            "start": False,
+            "is_only_bday": False,
+
+            "expected_res": datetime(2024, 12, 31).strftime("%Y-%m-%d"),
+        },
+        {
+            "test_num": 42,
+            "input_date": datetime(2024, 2, 7).strftime("%Y-%m-%d"),
+            "frequency": "HY",
+            "shift": 0,
+            "start": True,
+            "is_only_bday": False,
+
+            "expected_res": datetime(2024, 1, 1).strftime("%Y-%m-%d"),
+        },
+        {
+            "test_num": 43,
+            "input_date": datetime(2024, 2, 7).strftime("%Y-%m-%d"),
+            "frequency": "HY",
+            "shift": 0,
+            "start": False,
+            "is_only_bday": False,
+
+            "expected_res": datetime(2024, 6, 30).strftime("%Y-%m-%d"),
+        },
+        {
+            "test_num": 44,
+            "input_date": datetime(2024, 9, 7).strftime("%Y-%m-%d"),
+            "frequency": "HY",
+            "shift": -3,
+            "start": True,
+            "is_only_bday": False,
+
+            "expected_res": datetime(2023, 1, 1).strftime("%Y-%m-%d"),
+        },
+        {
+            "test_num": 45,
+            "input_date": datetime(2024, 9, 7).strftime("%Y-%m-%d"),
+            "frequency": "HY",
+            "shift": -3,
+            "start": False,
+            "is_only_bday": False,
+
+            "expected_res": datetime(2023, 6, 30).strftime("%Y-%m-%d"),
+        },
+        {
+            "test_num": 46,
+            "input_date": datetime(2024, 9, 7).strftime("%Y-%m-%d"),
+            "frequency": "HY",
+            "shift": 4,
+            "start": True,
+            "is_only_bday": False,
+
+            "expected_res": datetime(2026, 7, 1).strftime("%Y-%m-%d"),
+        },
+        {
+            "test_num": 47,
+            "input_date": datetime(2024, 9, 7).strftime("%Y-%m-%d"),
+            "frequency": "HY",
+            "shift": 4,
+            "start": False,
+            "is_only_bday": False,
+
+            "expected_res": datetime(2026, 12, 31).strftime("%Y-%m-%d"),
+        },
+        {
+            "test_num": 48,
+            "input_date": datetime(2024, 9, 7).strftime("%Y-%m-%d"),
+            "frequency": "HY",
+            "shift": -8,
+            "start": True,
+            "is_only_bday": False,
+
+            "expected_res": datetime(2020, 7, 1).strftime("%Y-%m-%d"),
+        },
+        {
+            "test_num": 49,
+            "input_date": datetime(2024, 9, 7).strftime("%Y-%m-%d"),
+            "frequency": "HY",
+            "shift": -8,
+            "start": False,
+            "is_only_bday": False,
+
+            "expected_res": datetime(2020, 12, 31).strftime("%Y-%m-%d"),
+        },
     ]
     test_func(calculate_period_date, test_cases)
 
