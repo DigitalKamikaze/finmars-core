@@ -199,7 +199,7 @@ def get_custom_range(date_from: datetime, date_to: datetime):
     return [(date_from.strftime("%Y-%m-%d"), date_to.strftime("%Y-%m-%d"))]
 
 
-def split_date_range_list(
+def split_date_range_list(  # noqa: PLR0911
     date_from_str: str,
     date_to_str: str,
     period_type: str = "daily",

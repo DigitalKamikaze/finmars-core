@@ -725,7 +725,7 @@ def shift_to_week_boundary(
     return input_date
 
 
-def pick_dates_from_range(
+def pick_dates_from_range(  # noqa: PLR0912
     start_date: str | datetime.date,
     end_date: str | datetime.date,
     frequency: str,
