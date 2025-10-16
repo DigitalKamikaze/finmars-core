@@ -74,6 +74,26 @@ class CurrencyHistoryViewSetTest(BaseTestCase):
         response_json = response.json()
         self.assertEqual(len(response_json["results"]), 5)
 
+    def test__list_light(self):
+        currency_history = self.create_currency_history()
+        response = self.client.get(path=f"{self.url}light/")
+        self.assertEqual(response.status_code, 200, response.content)
+
+        response_json = response.json()
+        self.assertEqual(response_json["count"], 1)
+        result = response_json["results"][0]
+
+        self.assertIsInstance(result["currency_object"], dict)
+        self.assertEqual(
+            result["currency_object"]["user_code"], currency_history.currency.user_code
+        )
+
+        self.assertIsInstance(result["pricing_policy_object"], dict)
+        self.assertEqual(
+            result["pricing_policy_object"]["user_code"],
+            currency_history.pricing_policy.user_code,
+        )
+
     def test__get_filters(self):  # sourcery skip: extract-duplicate-method
         currency_history = self.create_currency_history()
         response = self.client.get(path=f"{self.url}?currency={currency_history.currency.id}")

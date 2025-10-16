@@ -214,6 +214,27 @@ class PriceHistoryViewSetTest(BaseTestCase):
         response_json = response.json()
         self.assertEqual(len(response_json["results"]), 12)
 
+    def test__list_light(self):
+        pricing_history = self.create_pricing_history()
+        response = self.client.get(path=f"{self.url}light/")
+        self.assertEqual(response.status_code, 200, response.content)
+
+        response_json = response.json()
+        self.assertEqual(response_json["count"], 1)
+        result = response_json["results"][0]
+
+        self.assertIsInstance(result["instrument_object"], dict)
+        self.assertEqual(
+            result["instrument_object"]["user_code"],
+            pricing_history.instrument.user_code,
+        )
+
+        self.assertIsInstance(result["pricing_policy_object"], dict)
+        self.assertEqual(
+            result["pricing_policy_object"]["user_code"],
+            pricing_history.pricing_policy.user_code,
+        )
+
     def test__get_filters(self):  # sourcery skip: extract-duplicate-method
         pricing_history = self.create_pricing_history()
         response = self.client.get(path=f"{self.url}?instrument={pricing_history.instrument.id}")

@@ -141,6 +141,12 @@ class CurrencyViewSerializer(ModelWithUserCodeSerializer):
         ]
 
 
+class CurrencyUserCodeOnlySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Currency
+        fields = ["user_code"]
+
+
 class CurrencyHistorySerializer(ModelMetaSerializer, ModelWithTimeStampSerializer, ModelWithObjectStateSerializer):
     currency = CurrencyField()
     currency_object = CurrencyViewSerializer(source="currency", read_only=True)
@@ -248,6 +254,42 @@ class CurrencyHistorySerializer(ModelMetaSerializer, ModelWithTimeStampSerialize
         )
 
         return instance
+
+
+class CurrencyHistoryLightSerializer(ModelMetaSerializer):
+    currency_object = serializers.SerializerMethodField()
+    pricing_policy_object = serializers.SerializerMethodField()
+    fx_rate = FloatEvalField()
+    procedure_modified_datetime = ReadOnlyField()   
+
+    class Meta:
+        model = CurrencyHistory
+        fields = [
+            "id",
+            "currency_object",
+            "pricing_policy_object",
+            "date",
+            "fx_rate",
+            "procedure_modified_datetime",
+            "modified_at",
+            "is_temporary_fx_rate",
+        ]
+
+        read_only_fields = fields
+
+    def get_currency_object(self, obj):
+        # there was a cyclical import, so I moved it here
+        from poms.currencies.serializers import CurrencyUserCodeOnlySerializer
+
+        serializer = CurrencyUserCodeOnlySerializer(obj.currency)
+        return serializer.data
+
+    def get_pricing_policy_object(self, obj):
+        # there was a cyclical import, so I moved it here
+        from poms.instruments.serializers import PricingPolicyUserCodeOnlySerializer
+
+        serializer = PricingPolicyUserCodeOnlySerializer(obj.pricing_policy)
+        return serializer.data
 
 
 class CurrencyEvalSerializer(ModelWithUserCodeSerializer, ModelWithTimeStampSerializer):

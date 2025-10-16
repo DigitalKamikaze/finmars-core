@@ -26,6 +26,7 @@ from poms.currencies.filters import (
 from poms.currencies.models import Currency, CurrencyHistory
 from poms.currencies.serializers import (
     CurrencyHistorySerializer,
+    CurrencyHistoryLightSerializer,
     CurrencyLightSerializer,
     CurrencySerializer,
 )
@@ -229,6 +230,19 @@ class CurrencyHistoryViewSet(AbstractModelViewSet):
         "pricing_policy__short_name",
         "pricing_policy__public_name",
     ]
+
+    @action(
+        detail=False,
+        methods=["get"],
+        url_path="light",
+        serializer_class=CurrencyHistoryLightSerializer,
+    )
+    def list_light(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginator.post_paginate_queryset(queryset, request)
+        serializer = self.get_serializer(page, many=True)
+
+        return self.get_paginated_response(serializer.data)
 
     @action(detail=False, methods=["post"], url_path="bulk-create")
     def bulk_create(self, request, *args, **kwargs):
