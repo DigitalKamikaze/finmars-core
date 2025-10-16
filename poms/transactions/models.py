@@ -3,7 +3,7 @@ import logging
 import time
 import traceback
 from datetime import date
-from math import isnan
+from math import isclose, isnan
 
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.contenttypes.models import ContentType
@@ -20,7 +20,7 @@ from poms.common.models import (
     NamedModel,
     TimeStampedModel,
 )
-from poms.common.utils import date_now, isclose
+from poms.common.utils import date_now
 from poms.configuration.models import ConfigurationModel
 from poms.counterparties.models import Counterparty, Responsible
 from poms.currencies.models import Currency, CurrencyHistory
