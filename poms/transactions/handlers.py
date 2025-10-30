@@ -2294,7 +2294,7 @@ class TransactionTypeProcess:
         for key, value in self.values.items():
             names[key] = value
 
-        _l.info('before names %s' % names)
+        # _l.info('before names %s' % names)
 
         self.record_execution_progress("Calculating User Fields")
 
