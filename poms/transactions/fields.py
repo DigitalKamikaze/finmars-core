@@ -1,14 +1,13 @@
+import json
+import logging
+
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
+from rest_framework import serializers
 from rest_framework.fields import ReadOnlyField
 from rest_framework.relations import RelatedField
-from rest_framework import serializers
-import json
-
-import logging
-_l = logging.getLogger("poms.transactions")
 
 from poms.common.fields import (
     SlugRelatedFilteredField,
@@ -21,6 +20,8 @@ from poms.transactions.models import (
     TransactionTypeInput,
 )
 from poms.users.filters import OwnerByMasterUserFilter
+
+_l = logging.getLogger("poms.transactions")
 
 
 class TransactionTypeGroupField(UserCodeOrPrimaryKeyRelatedField):
@@ -133,6 +134,6 @@ class CharOrJSONField(serializers.CharField):
 
     def to_internal_value(self, data):
         # Accept dicts and convert to JSON string
-        if isinstance(data, (dict, list)):
+        if isinstance(data, dict):
             return json.dumps(data)
         return super().to_internal_value(data)

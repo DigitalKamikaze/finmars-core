@@ -9,7 +9,6 @@ from dateutil import relativedelta
 from django.conf import settings
 from django.utils.functional import Promise, SimpleLazyObject
 
-
 from poms.expressions_engine.exceptions import (
     AttributeDoesNotExist,
     ExpressionEvalError,
@@ -28,7 +27,6 @@ from poms.expressions_engine.functions import (
     _parse_number,
     _print,
 )
-
 
 _l = logging.getLogger("poms.formula")
 
@@ -763,6 +761,8 @@ def _get_supported_models_serializer_class():
         AccountEvalSerializer,
         AccountTypeEvalSerializer,
     )
+    from poms.clients.models import Client
+    from poms.clients.serializers import ClientSerializer
     from poms.counterparties.models import Counterparty, Responsible
     from poms.counterparties.serializers import (
         CounterpartyEvalSerializer,
@@ -809,11 +809,9 @@ def _get_supported_models_serializer_class():
     )
     from poms.users.models import Member
     from poms.users.serializers import MemberSerializer
-
-    from poms.clients.models import Client
-    from poms.clients.serializers import ClientSerializer
     from poms.vault.models import VaultRecord
     from poms.vault.serializers import VaultRecordSerializer
+
     return {
         Account: AccountEvalSerializer,
         AccountType: AccountTypeEvalSerializer,
@@ -840,7 +838,7 @@ def _get_supported_models_serializer_class():
         Country: CountrySerializer,
         AccrualCalculationSchedule: AccrualCalculationScheduleSerializer,
         Client: ClientSerializer,
-        VaultRecord: VaultRecordSerializer
+        VaultRecord: VaultRecordSerializer,
     }
 
 

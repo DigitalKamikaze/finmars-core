@@ -2870,8 +2870,6 @@ def _get_instrument_field(evaluator, instrument, parameter_name):
 _get_instrument_field.evaluator = True
 
 
-
-
 def _get_currency_field(evaluator, currency, parameter_name):
     context = evaluator.context  # noqa: F841
 
