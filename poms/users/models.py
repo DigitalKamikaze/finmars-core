@@ -722,6 +722,24 @@ class MasterUser(models.Model):
             expr="(ask+bid)/2",
             owner=finmars_bot,
         )
+
+        from poms.provenance.models import Source
+        source = Source.objects.create(
+            name="-",
+            owner=finmars_bot
+        )
+        from poms.provenance.models import Provider
+        provider = Provider.objects.create(
+            name="-",
+            owner=finmars_bot
+        )
+        from poms.clients.models import Client
+        client = Client.objects.create(
+            master_user=self,
+            name="-",
+            owner_id=finmars_bot,
+        )
+
         # pricing_policy_dft = PricingPolicy.objects.create(
         #     master_user=self,
         #     name="DFT",
@@ -1414,7 +1432,6 @@ class FakeSequence(models.Model):
         seq.save(update_fields=["value"])
 
         return seq.value
-
 
 # @receiver(post_save, dispatch_uid='create_profile', sender=settings.AUTH_USER_MODEL)
 # def create_profile(sender, instance=None, created=None, **kwargs):

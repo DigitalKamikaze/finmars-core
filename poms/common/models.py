@@ -346,22 +346,6 @@ class ObjectStateModel(models.Model):
         help_text=gettext_lazy("Unique Identifier for this object in Provider Database"),
     )
 
-    provider_version_semantic = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-        verbose_name=gettext_lazy("provider version semantic"),
-        help_text=gettext_lazy("Semantic Version https://semver.org/"),
-    )
-
-    provider_version_calendar = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True,
-        verbose_name=gettext_lazy("provider version semantic"),
-        help_text=gettext_lazy("Calendar Version https://calver.org/"),
-    )
-
     source_user_code = models.CharField(
         max_length=1024,
         null=True,
@@ -421,19 +405,20 @@ class ObjectStateModel(models.Model):
         help_text=gettext_lazy("Finmars Vault credential's version"),
     )
 
-    platform_version = models.JSONField(
-        default=dict,  # will create {}
-        blank=True,
-        verbose_name=gettext_lazy("platform version"),
-        help_text=gettext_lazy("Dictionary of platform services (service: MAJOR.MINOR.PATCH)"),
-    )
-
     origin_initiator_code = models.CharField(
         max_length=1024,
         null=True,
         blank=True,
         verbose_name=gettext_lazy("origin_initiator_code"),
         help_text=gettext_lazy("user login (who is responsible for manual/scheduler/api call): john_doe"),
+    )
+
+    origin_initiator_third_party_push_code = models.CharField(
+        max_length=1024,
+        null=True,
+        blank=True,
+        verbose_name=gettext_lazy("origin_initiator_third_party_push_code"),
+        help_text=gettext_lazy("specification for third_party_push"),
     )
 
     workflow_module_user_code = models.CharField(
