@@ -24,3 +24,10 @@ router.register(
     provenance.SourceVersionViewSet,
     "sourceVersion",
 )
+
+
+router.register(
+    r"platform-version",
+    provenance.PlatformVersionViewSet,
+    "platformVersion",
+)
