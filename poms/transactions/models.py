@@ -32,6 +32,7 @@ from poms.instruments.models import (
 )
 from poms.obj_attrs.models import GenericAttribute
 from poms.portfolios.models import Portfolio
+from poms.provenance.models import ProvenanceModel
 from poms.strategies.models import Strategy1, Strategy2, Strategy3
 from poms.users.models import EcosystemDefault, FakeSequence, MasterUser
 
@@ -2306,7 +2307,7 @@ class EventToHandle(NamedModel):
         verbose_name_plural = gettext_lazy("events to handle")
 
 
-class ComplexTransaction(TimeStampedModel):
+class ComplexTransaction(TimeStampedModel, ProvenanceModel):
     PRODUCTION = 1
     PENDING = 2
     IGNORE = 3
@@ -2955,7 +2956,7 @@ class ComplexTransactionInput(models.Model):
         ]
 
 
-class Transaction(models.Model):
+class Transaction(ProvenanceModel):
     master_user = models.ForeignKey(
         MasterUser,
         related_name="transactions",

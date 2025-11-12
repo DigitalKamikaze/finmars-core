@@ -55,6 +55,7 @@ from poms.integrations.models import PriceDownloadScheme
 from poms.obj_attrs.serializers import ModelWithAttributesSerializer
 from poms.portfolios.fields import PortfolioDefault, PortfolioField
 from poms.portfolios.models import Portfolio
+from poms.provenance.serializers import ModelWithProvenanceSerializer
 from poms.reconciliation.models import TransactionTypeReconField
 from poms.reconciliation.serializers import (
     ReconciliationComplexTransactionFieldSerializer,
@@ -3112,7 +3113,7 @@ class TransactionTypeSerializer(
                 actions[order] = item
 
     def save_actions_instrument_accrual_calculation_schedule(
-        self, instance, inputs, actions, existed_actions, actions_data
+            self, instance, inputs, actions, existed_actions, actions_data
     ):
         for order, action_data in enumerate(actions_data):
             pk = action_data.pop("id", None)
@@ -3400,7 +3401,7 @@ class TransactionSimpleSerializer(serializers.ModelSerializer):
         ]
 
 
-class TransactionSerializer(serializers.ModelSerializer):
+class TransactionSerializer(ModelWithProvenanceSerializer):
     master_user = MasterUserField()
     complex_transaction = serializers.PrimaryKeyRelatedField(read_only=True)
     complex_transaction_order = serializers.IntegerField(read_only=True)
@@ -3808,7 +3809,8 @@ def remove_user_fields_from_representation(data: dict) -> dict:
     return data
 
 
-class ComplexTransactionSerializer(ModelWithAttributesSerializer, ModelWithTimeStampSerializer, ModelMetaSerializer):
+class ComplexTransactionSerializer(ModelWithAttributesSerializer, ModelWithTimeStampSerializer, ModelMetaSerializer,
+                                   ModelWithProvenanceSerializer):
     master_user = MasterUserField()
     transaction_type = serializers.PrimaryKeyRelatedField(read_only=True)
     transactions = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
@@ -4248,8 +4250,8 @@ class TransactionTypeProcessValuesSerializer(serializers.Serializer):
             field_object = None
 
             if i.value_type in (
-                TransactionTypeInput.STRING,
-                TransactionTypeInput.SELECTOR,
+                    TransactionTypeInput.STRING,
+                    TransactionTypeInput.SELECTOR,
             ):
                 field = serializers.CharField(
                     required=False,
@@ -4708,8 +4710,8 @@ class ComplexTransactionViewOnly:
             i = ci.transaction_type_input
             value = None
             if i.value_type in (
-                TransactionTypeInput.STRING,
-                TransactionTypeInput.SELECTOR,
+                    TransactionTypeInput.STRING,
+                    TransactionTypeInput.SELECTOR,
             ):
                 value = ci.value_string
             elif i.value_type == TransactionTypeInput.NUMBER:
@@ -4728,7 +4730,8 @@ class ComplexTransactionViewOnly:
         result_time = f"{time.perf_counter() - _st:3.3f}"
         _l.debug(f"ComplexTransactionViewOnly.init {result_time}")
 
-    def _get_val_by_model_cls_for_complex_transaction_input(self, master_user, obj, model_class):  # noqa: PLR0911, PLR0912
+    def _get_val_by_model_cls_for_complex_transaction_input(self, master_user, obj,
+                                                            model_class):  # noqa: PLR0911, PLR0912
         try:
             if issubclass(model_class, Account):
                 return Account.objects.get(master_user=master_user, user_code=obj.value_relation)
@@ -5045,17 +5048,17 @@ class RecalculatePermissionComplexTransactionSerializer(serializers.Serializer):
 
 class RecalculateUserFields:
     def __init__(
-        self,
-        task_id=None,
-        task_status=None,
-        master_user=None,
-        member=None,
-        transaction_type_id=None,
-        key=None,
-        total_rows=None,
-        processed_rows=None,
-        stats_file_report=None,
-        stats=None,
+            self,
+            task_id=None,
+            task_status=None,
+            master_user=None,
+            member=None,
+            transaction_type_id=None,
+            key=None,
+            total_rows=None,
+            processed_rows=None,
+            stats_file_report=None,
+            stats=None,
     ):
         self.task_id = task_id
         self.task_status = task_status

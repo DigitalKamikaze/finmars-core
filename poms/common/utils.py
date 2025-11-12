@@ -918,6 +918,11 @@ def attr_is_relation(content_type_key: str, attribute_key: str) -> bool:
         "cash_currency",
         "portfolio_register",
         "valuation_currency",
+        "provider",
+        "provider_version",
+        "source",
+        "source_version",
+        "platform_version"
     }
 
 
