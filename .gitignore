@@ -169,4 +169,6 @@ rabbitmq_data/
 redis_data/
 finmars-core.iml
 
+finmars-core.iml
+
 *.sql

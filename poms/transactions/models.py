@@ -1024,6 +1024,7 @@ class TransactionTypeInput(models.Model):
     RELATION = 100
     SELECTOR = 110
     BUTTON = 120
+    JSON = 130
     TYPES = (
         (NUMBER, gettext_lazy("Number")),
         (STRING, gettext_lazy("String")),
@@ -1031,6 +1032,7 @@ class TransactionTypeInput(models.Model):
         (RELATION, gettext_lazy("Relation")),
         (SELECTOR, gettext_lazy("Selector")),
         (BUTTON, gettext_lazy("Button")),
+        (JSON, gettext_lazy("JSON")),
     )
 
     transaction_type = models.ForeignKey(
