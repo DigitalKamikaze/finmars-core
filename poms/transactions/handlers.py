@@ -820,6 +820,61 @@ class TransactionTypeProcess:
                             object_data=object_data,
                         )
 
+                        self._set_rel(
+                            errors=errors,
+                            values=self.values,
+                            model=Provider,
+                            target=instrument,
+                            target_attr_name="provider",
+                            source=action_instrument,
+                            source_attr_name="provider",
+                            object_data=object_data,
+                        )
+
+                        self._set_rel(
+                            errors=errors,
+                            values=self.values,
+                            model=ProviderVersion,
+                            target=instrument,
+                            target_attr_name="provider_version",
+                            source=action_instrument,
+                            source_attr_name="provider_version",
+                            object_data=object_data,
+                        )
+
+                        self._set_rel(
+                            errors=errors,
+                            values=self.values,
+                            model=Source,
+                            target=instrument,
+                            target_attr_name="source",
+                            source=action_instrument,
+                            source_attr_name="source",
+                            object_data=object_data,
+                        )
+
+                        self._set_rel(
+                            errors=errors,
+                            values=self.values,
+                            model=SourceVersion,
+                            target=instrument,
+                            target_attr_name="source_version",
+                            source=action_instrument,
+                            source_attr_name="source_version",
+                            object_data=object_data,
+                        )
+
+                        self._set_rel(
+                            errors=errors,
+                            values=self.values,
+                            model=PlatformVersion,
+                            target=instrument,
+                            target_attr_name="platform_version",
+                            source=action_instrument,
+                            source_attr_name="platform_version",
+                            object_data=object_data,
+                        )
+
                     try:
                         rebook_reaction = action_instrument.rebook_reaction
 
@@ -2190,6 +2245,61 @@ class TransactionTypeProcess:
                         source=action_transaction,
                         source_attr_name="is_canceled",
                     )
+
+                self._set_rel(
+                    errors=errors,
+                    values=self.values,
+                    default_value=None,
+                    model=Provider,
+                    target=transaction,
+                    target_attr_name="provider",
+                    source=action_transaction,
+                    source_attr_name="provider",
+                )
+
+                self._set_rel(
+                    errors=errors,
+                    values=self.values,
+                    default_value=None,
+                    model=ProviderVersion,
+                    target=transaction,
+                    target_attr_name="provider_version",
+                    source=action_transaction,
+                    source_attr_name="provider_version",
+                )
+
+                self._set_rel(
+                    errors=errors,
+                    values=self.values,
+                    default_value=None,
+                    model=Source,
+                    target=transaction,
+                    target_attr_name="source",
+                    source=action_transaction,
+                    source_attr_name="source",
+                )
+
+                self._set_rel(
+                    errors=errors,
+                    values=self.values,
+                    default_value=None,
+                    model=SourceVersion,
+                    target=transaction,
+                    target_attr_name="source_version",
+                    source=action_transaction,
+                    source_attr_name="source_version",
+                )
+
+                self._set_rel(
+                    errors=errors,
+                    values=self.values,
+                    default_value=None,
+                    model=PlatformVersion,
+                    target=transaction,
+                    target_attr_name="platform_version",
+                    source=action_transaction,
+                    source_attr_name="platform_version",
+                )
 
                 transaction_date_source = "null"
 
