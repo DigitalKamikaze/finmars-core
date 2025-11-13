@@ -724,17 +724,14 @@ class MasterUser(models.Model):
         )
 
         from poms.provenance.models import Source
-        source = Source.objects.create(
-            name="-",
-            owner=finmars_bot
-        )
+
+        Source.objects.create(name="-", owner=finmars_bot)
         from poms.provenance.models import Provider
-        provider = Provider.objects.create(
-            name="-",
-            owner=finmars_bot
-        )
+
+        Provider.objects.create(name="-", owner=finmars_bot)
         from poms.clients.models import Client
-        client = Client.objects.create(
+
+        Client.objects.create(
             master_user=self,
             name="-",
             owner_id=finmars_bot,
@@ -1432,6 +1429,7 @@ class FakeSequence(models.Model):
         seq.save(update_fields=["value"])
 
         return seq.value
+
 
 # @receiver(post_save, dispatch_uid='create_profile', sender=settings.AUTH_USER_MODEL)
 # def create_profile(sender, instance=None, created=None, **kwargs):

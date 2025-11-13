@@ -111,7 +111,7 @@ class Strategy1Serializer(
     ModelWithAttributesSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
-    ModelWithProvenanceSerializer
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
     subgroup = Strategy1SubgroupField(default=Strategy1SubgroupDefault())

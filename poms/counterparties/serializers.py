@@ -55,7 +55,7 @@ class CounterpartySerializer(
     ModelWithUserCodeSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
-    ModelWithProvenanceSerializer
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
     group = CounterpartyGroupField()
@@ -166,7 +166,7 @@ class ResponsibleSerializer(
     ModelWithUserCodeSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
-    ModelWithProvenanceSerializer
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
     group = ResponsibleGroupField()

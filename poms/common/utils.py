@@ -922,7 +922,7 @@ def attr_is_relation(content_type_key: str, attribute_key: str) -> bool:
         "provider_version",
         "source",
         "source_version",
-        "platform_version"
+        "platform_version",
     }
 
 

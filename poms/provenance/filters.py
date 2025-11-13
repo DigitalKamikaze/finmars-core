@@ -4,7 +4,7 @@ from poms.common.filters import (
     CharFilter,
     NoOpFilter,
 )
-from poms.provenance.models import Provider, Source, ProviderVersion, SourceVersion, PlatformVersion
+from poms.provenance.models import PlatformVersion, Provider, ProviderVersion, Source, SourceVersion
 
 
 class ProviderFilterSet(FilterSet):
@@ -29,7 +29,6 @@ class ProviderVersionFilterSet(FilterSet):
     class Meta:
         model = ProviderVersion
         fields = []
-
 
 
 class SourceFilterSet(FilterSet):

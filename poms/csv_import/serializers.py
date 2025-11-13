@@ -220,12 +220,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
+                "platform_version",
             ],
             "accounts.account": [
                 "name",
@@ -245,13 +244,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
-
+                "platform_version",
             ],
             "counterparties.counterparty": [
                 "name",
@@ -271,13 +268,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
-
+                "platform_version",
             ],
             "counterparties.responsible": [
                 "name",
@@ -297,13 +292,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
-
+                "platform_version",
             ],
             "portfolios.portfolio": [
                 "name",
@@ -326,12 +319,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
+                "platform_version",
             ],
             "portfolios.portfoliotype": [
                 "name",
@@ -377,14 +369,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
-
+                "platform_version",
             ],
             "instruments.instrumentfactorschedule": [
                 "instrument",
@@ -401,12 +390,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
+                "platform_version",
             ],
             "instruments.accrualcalculationschedule": [
                 "instrument",
@@ -429,12 +417,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
+                "platform_version",
             ],
             "instruments.pricehistory": [
                 "instrument",
@@ -459,12 +446,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
+                "platform_version",
             ],
             "currencies.currencyhistory": [
                 "currency",
@@ -483,12 +469,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
+                "platform_version",
             ],
             "strategies.strategy1": [
                 "name",
@@ -508,12 +493,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
+                "platform_version",
             ],
             "strategies.strategy2": [
                 "name",
@@ -533,12 +517,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
+                "platform_version",
             ],
             "strategies.strategy3": [
                 "name",
@@ -558,12 +541,11 @@ class CsvImportSchemeSerializer(ModelWithTimeStampSerializer, ModelWithUserCodeS
                 "workflow_module_version_semantic",
                 "workflow_id",
                 "platform_task_id",
-
                 "provider",
                 "provider_version",
                 "source",
                 "source_version",
-                "platform_version"
+                "platform_version",
             ],
         }
 

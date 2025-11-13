@@ -37,7 +37,7 @@ class CurrencySerializer(
     ModelWithAttributesSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
-    ModelWithProvenanceSerializer
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
 
@@ -143,7 +143,9 @@ class CurrencyViewSerializer(ModelWithUserCodeSerializer):
         ]
 
 
-class CurrencyHistorySerializer(ModelMetaSerializer, ModelWithTimeStampSerializer, ModelWithObjectStateSerializer, ModelWithProvenanceSerializer):
+class CurrencyHistorySerializer(
+    ModelMetaSerializer, ModelWithTimeStampSerializer, ModelWithObjectStateSerializer, ModelWithProvenanceSerializer
+):
     currency = CurrencyField()
     currency_object = CurrencyViewSerializer(source="currency", read_only=True)
     pricing_policy = PricingPolicyField(allow_null=False)

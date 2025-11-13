@@ -102,7 +102,6 @@ class SourceVersion(NamedModel, TimeStampedModel):
 
 
 class PlatformVersion(NamedModel, TimeStampedModel):
-
     master_user = models.ForeignKey(
         MasterUser,
         related_name="platform_versions",

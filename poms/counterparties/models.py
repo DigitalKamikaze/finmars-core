@@ -10,8 +10,9 @@ from poms.common.models import (
     TimeStampedModel,
 )
 from poms.obj_attrs.models import GenericAttribute
-from poms.users.models import MasterUser
 from poms.provenance.models import ProvenanceModel
+from poms.users.models import MasterUser
+
 
 # noinspection PyUnresolvedReferences
 class CounterpartyGroup(NamedModel, FakeDeletableModel):

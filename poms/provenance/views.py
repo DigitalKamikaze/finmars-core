@@ -1,15 +1,24 @@
 from poms.common.views import AbstractModelViewSet
-from poms.provenance.filters import SourceFilterSet, ProviderFilterSet, ProviderVersionFilterSet, \
-    SourceVersionFilterSet, PlatformVersionFilterSet
-from poms.provenance.models import Provider, Source, ProviderVersion, SourceVersion, PlatformVersion
-from poms.provenance.serializers import ProviderSerializer, SourceSerializer, ProviderVersionSerializer, \
-    SourceVersionSerializer, PlatformVersionSerializer
+from poms.provenance.filters import (
+    PlatformVersionFilterSet,
+    ProviderFilterSet,
+    ProviderVersionFilterSet,
+    SourceFilterSet,
+    SourceVersionFilterSet,
+)
+from poms.provenance.models import PlatformVersion, Provider, ProviderVersion, Source, SourceVersion
+from poms.provenance.serializers import (
+    PlatformVersionSerializer,
+    ProviderSerializer,
+    ProviderVersionSerializer,
+    SourceSerializer,
+    SourceVersionSerializer,
+)
 
 
 class ProviderViewSet(AbstractModelViewSet):
     queryset = Provider.objects
-    filter_backends = AbstractModelViewSet.filter_backends + [
-    ]
+    filter_backends = AbstractModelViewSet.filter_backends + []
     filterset_class = ProviderFilterSet
     serializer_class = ProviderSerializer
     ordering_fields = [
@@ -22,8 +31,7 @@ class ProviderViewSet(AbstractModelViewSet):
 
 class ProviderVersionViewSet(AbstractModelViewSet):
     queryset = ProviderVersion.objects
-    filter_backends = AbstractModelViewSet.filter_backends + [
-    ]
+    filter_backends = AbstractModelViewSet.filter_backends + []
     filterset_class = ProviderVersionFilterSet
     serializer_class = ProviderVersionSerializer
     ordering_fields = [
@@ -36,8 +44,7 @@ class ProviderVersionViewSet(AbstractModelViewSet):
 
 class SourceViewSet(AbstractModelViewSet):
     queryset = Source.objects
-    filter_backends = AbstractModelViewSet.filter_backends + [
-    ]
+    filter_backends = AbstractModelViewSet.filter_backends + []
     filterset_class = SourceFilterSet
     serializer_class = SourceSerializer
     ordering_fields = [
@@ -50,8 +57,7 @@ class SourceViewSet(AbstractModelViewSet):
 
 class SourceVersionViewSet(AbstractModelViewSet):
     queryset = SourceVersion.objects
-    filter_backends = AbstractModelViewSet.filter_backends + [
-    ]
+    filter_backends = AbstractModelViewSet.filter_backends + []
     filterset_class = SourceVersionFilterSet
     serializer_class = SourceVersionSerializer
     ordering_fields = [
@@ -62,11 +68,9 @@ class SourceVersionViewSet(AbstractModelViewSet):
     ]
 
 
-
 class PlatformVersionViewSet(AbstractModelViewSet):
     queryset = PlatformVersion.objects
-    filter_backends = AbstractModelViewSet.filter_backends + [
-    ]
+    filter_backends = AbstractModelViewSet.filter_backends + []
     filterset_class = PlatformVersionFilterSet
     serializer_class = PlatformVersionSerializer
     ordering_fields = [

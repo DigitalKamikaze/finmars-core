@@ -53,7 +53,7 @@ from poms.instruments.models import (
 from poms.obj_attrs.models import GenericAttributeType, GenericClassifier
 from poms.portfolios.models import PortfolioType
 from poms.procedures.models import RequestDataFileProcedureInstance
-from poms.provenance.models import Provider, ProviderVersion, Source, SourceVersion, PlatformVersion
+from poms.provenance.models import PlatformVersion, Provider, ProviderVersion, Source, SourceVersion
 from poms.strategies.models import (
     Strategy1Subgroup,
     Strategy2Subgroup,
@@ -330,14 +330,14 @@ def set_events_for_instrument(instrument_object, data_object, instrument_type_ob
 
     if maturity:
         if (
-                instrument_type
-                in {
-            "bonds",
-            "convertible_bonds",
-            "index_linked_bonds",
-            "short_term_notes",
-        }
-                and len(instrument_object["event_schedules"]) == 2
+            instrument_type
+            in {
+                "bonds",
+                "convertible_bonds",
+                "index_linked_bonds",
+                "short_term_notes",
+            }
+            and len(instrument_object["event_schedules"]) == 2
         ):
             undate_events_for_instrument(instrument_object, 1, maturity)
 
@@ -405,8 +405,7 @@ def set_periodicity_period(source_data, accrual):
 
 
 # Global method for create instrument object from Instrument Json data
-def handler_instrument_object(source_data, instrument_type, master_user, ecosystem_default,
-                              attribute_types):  # noqa: PLR0912, PLR0915
+def handler_instrument_object(source_data, instrument_type, master_user, ecosystem_default, attribute_types):  # noqa: PLR0912, PLR0915
     func = "handler_instrument_object"
 
     object_data = {"instrument_type": instrument_type.id}
@@ -480,8 +479,8 @@ def handler_instrument_object(source_data, instrument_type, master_user, ecosyst
             _l.error(f"{func} no such country {source_data['country']['alpha_3']}")
 
     if "registration_date" in source_data and source_data["registration_date"] not in (
-            "null",
-            "",
+        "null",
+        "",
     ):
         object_data["registration_date"] = source_data["registration_date"]
     else:
@@ -861,9 +860,9 @@ class SimpleImportProcess:
 
                     # TODO check encoding (maybe should be taken from scheme)
                     with open(
-                            tmpf.name,
-                            encoding="utf_8_sig",
-                            errors="ignore",
+                        tmpf.name,
+                        encoding="utf_8_sig",
+                        errors="ignore",
                     ) as cf:
                         # TODO check quotechar (maybe should be taken from scheme)
                         reader = csv.reader(
@@ -1112,20 +1111,20 @@ class SimpleImportProcess:
                     attribute = {"attribute_type": attribute_type.id}
 
                     if (
-                            attribute_type.value_type == GenericAttributeType.STRING
-                            and item.final_inputs[entity_field.attribute_user_code]
+                        attribute_type.value_type == GenericAttributeType.STRING
+                        and item.final_inputs[entity_field.attribute_user_code]
                     ):
                         attribute["value_string"] = item.final_inputs[entity_field.attribute_user_code]
 
                     if attribute_type.value_type == GenericAttributeType.NUMBER and (
-                            item.final_inputs[entity_field.attribute_user_code]
-                            or item.final_inputs[entity_field.attribute_user_code] == 0
+                        item.final_inputs[entity_field.attribute_user_code]
+                        or item.final_inputs[entity_field.attribute_user_code] == 0
                     ):
                         attribute["value_float"] = item.final_inputs[entity_field.attribute_user_code]
 
                     if (
-                            attribute_type.value_type == GenericAttributeType.CLASSIFIER
-                            and item.final_inputs[entity_field.attribute_user_code]
+                        attribute_type.value_type == GenericAttributeType.CLASSIFIER
+                        and item.final_inputs[entity_field.attribute_user_code]
                     ):
                         try:
                             attribute["classifier"] = GenericClassifier.objects.get(
@@ -1148,8 +1147,8 @@ class SimpleImportProcess:
                             attribute["classifier"] = None
 
                     if (
-                            item.final_inputs[entity_field.attribute_user_code]
-                            and attribute_type.value_type == GenericAttributeType.DATE
+                        item.final_inputs[entity_field.attribute_user_code]
+                        and attribute_type.value_type == GenericAttributeType.DATE
                     ):
                         attribute["value_date"] = item.final_inputs[entity_field.attribute_user_code]
 
@@ -1164,7 +1163,7 @@ class SimpleImportProcess:
         for attribute in result_item["attributes"]:
             for entity_field in all_entity_fields_models:
                 if entity_field.attribute_user_code and (
-                        entity_field.attribute_user_code == attribute["attribute_type_object"]["user_code"]
+                    entity_field.attribute_user_code == attribute["attribute_type_object"]["user_code"]
                 ):
                     if attribute["attribute_type_object"]["value_type"] == GenericAttributeType.STRING:
                         if item.final_inputs[entity_field.attribute_user_code]:
@@ -1268,10 +1267,10 @@ class SimpleImportProcess:
             key = entity_field.system_property_key
 
             if (
-                    key in relation_fields_map
-                    and key in relation_models_to_ids
-                    and key in result_item
-                    and isinstance(result_item[key], str)
+                key in relation_fields_map
+                and key in relation_models_to_ids
+                and key in result_item
+                and isinstance(result_item[key], str)
             ):
                 if result_item[key] in relation_models_to_ids[key]:
                     result_item[key] = relation_models_to_ids[key][result_item[key]]
@@ -1937,7 +1936,7 @@ class SimpleImportProcess:
 
             system_message_title = "New Items (import from file)"
             if self.process_type == ProcessType.JSON and (
-                    self.execution_context and self.execution_context["started_by"] == "procedure"
+                self.execution_context and self.execution_context["started_by"] == "procedure"
             ):
                 system_message_title = "New itmes (import from broker)"
                 system_message_performed_by = "System"

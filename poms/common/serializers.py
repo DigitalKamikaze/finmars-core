@@ -197,7 +197,6 @@ class ModelWithObjectStateSerializer(serializers.ModelSerializer):
         self.fields["origin_initiator_type"] = serializers.CharField(allow_null=True, required=False)
         self.fields["origin_manual_entry_point"] = serializers.CharField(allow_null=True, required=False)
 
-
         self.fields["credential_user_code"] = serializers.CharField(allow_null=True, required=False)
         self.fields["credential_version_integer"] = serializers.CharField(allow_null=True, required=False)
 

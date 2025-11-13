@@ -26,6 +26,7 @@ import poms.notifications.views as notifications
 import poms.portfolios.urls as portfolio_router
 import poms.pricing.views as pricing
 import poms.procedures.urls as procedure_router
+import poms.provenance.urls as provenance_router
 import poms.reconciliation.views as reconciliation
 import poms.reference_tables.views as reference_table
 import poms.reports.urls as report_router
@@ -37,7 +38,6 @@ import poms.transactions.urls as transaction_router
 import poms.ui.urls as ui_router
 import poms.users.urls as users_router
 import poms.vault.urls as vault_router
-import poms.provenance.urls as provenance_router
 import poms.widgets.views as widgets
 from finmars_standardized_errors.views import ErrorRecordViewSet
 from poms.auth_tokens.views import (

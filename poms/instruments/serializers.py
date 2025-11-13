@@ -949,7 +949,7 @@ class InstrumentSerializer(
     ModelWithUserCodeSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
-    ModelWithProvenanceSerializer
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
     pricing_currency = CurrencyField()

@@ -67,7 +67,7 @@ class AccountSerializer(
     ModelWithTimeStampSerializer,
     ModelMetaSerializer,
     ModelWithObjectStateSerializer,
-    ModelWithProvenanceSerializer
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
     type = AccountTypeField()

@@ -165,7 +165,7 @@ class PortfolioSerializer(
     ModelWithUserCodeSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
-    ModelWithProvenanceSerializer
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
     registers = PortfolioPortfolioRegisterSerializer(
@@ -418,7 +418,7 @@ class PortfolioRegisterSerializer(
     ModelWithUserCodeSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
-    ModelWithProvenanceSerializer
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
 
