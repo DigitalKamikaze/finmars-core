@@ -891,5 +891,5 @@ EXPECTED_COMPLEX_TRANSACTION = {
     "source_version": None,
     "source_version_object": None,
     "platform_version": None,
-    "platform_version_object": None
+    "platform_version_object": None,
 }

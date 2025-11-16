@@ -1965,7 +1965,6 @@ class TransactionTypeActionTransaction(TransactionTypeAction):
         verbose_name=gettext_lazy("platform_version input"),
     )
 
-
     class Meta:
         verbose_name = gettext_lazy("transaction type action transaction")
         verbose_name_plural = gettext_lazy("transaction type action transactions")

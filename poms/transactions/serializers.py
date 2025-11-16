@@ -56,6 +56,7 @@ from poms.integrations.models import PriceDownloadScheme
 from poms.obj_attrs.serializers import ModelWithAttributesSerializer
 from poms.portfolios.fields import PortfolioDefault, PortfolioField
 from poms.portfolios.models import Portfolio
+from poms.provenance.models import PlatformVersion, Provider, ProviderVersion, Source, SourceVersion
 from poms.provenance.serializers import ModelWithProvenanceSerializer
 from poms.reconciliation.models import TransactionTypeReconField
 from poms.reconciliation.serializers import (
@@ -4239,6 +4240,20 @@ class TransactionTypeProcessValuesSerializer(serializers.Serializer):
         )
         from poms.integrations.serializers import PriceDownloadSchemeViewSerializer
         from poms.portfolios.serializers import PortfolioViewSerializer
+        from poms.provenance.fields import (
+            PlatformVersionField,
+            ProviderField,
+            ProviderVersionField,
+            SourceField,
+            SourceVersionField,
+        )
+        from poms.provenance.serializers import (
+            PlatformVersionSerializer,
+            ProviderSerializer,
+            ProviderVersionSerializer,
+            SourceSerializer,
+            SourceVersionSerializer,
+        )
         from poms.strategies.serializers import (
             Strategy1ViewSerializer,
             Strategy2ViewSerializer,
@@ -4484,6 +4499,56 @@ class TransactionTypeProcessValuesSerializer(serializers.Serializer):
                     )
 
                     field_object = VaultRecordSerializer(source=name, read_only=True)
+
+                elif issubclass(model_class, Provider):
+                    field = ProviderField(
+                        required=False,
+                        allow_null=True,
+                        label=i.name,
+                        help_text=i.verbose_name,
+                    )
+
+                    field_object = ProviderSerializer(source=name, read_only=True)
+
+                elif issubclass(model_class, ProviderVersion):
+                    field = ProviderVersionField(
+                        required=False,
+                        allow_null=True,
+                        label=i.name,
+                        help_text=i.verbose_name,
+                    )
+
+                    field_object = ProviderVersionSerializer(source=name, read_only=True)
+
+                elif issubclass(model_class, Source):
+                    field = SourceField(
+                        required=False,
+                        allow_null=True,
+                        label=i.name,
+                        help_text=i.verbose_name,
+                    )
+
+                    field_object = SourceSerializer(source=name, read_only=True)
+
+                elif issubclass(model_class, SourceVersion):
+                    field = SourceVersionField(
+                        required=False,
+                        allow_null=True,
+                        label=i.name,
+                        help_text=i.verbose_name,
+                    )
+
+                    field_object = SourceVersionSerializer(source=name, read_only=True)
+
+                elif issubclass(model_class, PlatformVersion):
+                    field = PlatformVersionField(
+                        required=False,
+                        allow_null=True,
+                        label=i.name,
+                        help_text=i.verbose_name,
+                    )
+
+                    field_object = PlatformVersionSerializer(source=name, read_only=True)
 
             elif i.value_type == TransactionTypeInput.BUTTON:
                 field = serializers.JSONField(allow_null=True, required=False)
