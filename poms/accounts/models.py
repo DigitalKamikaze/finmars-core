@@ -13,10 +13,11 @@ from poms.common.models import (
 )
 from poms.configuration.models import ConfigurationModel
 from poms.obj_attrs.models import GenericAttribute
+from poms.provenance.models import ProvenanceModel
 from poms.users.models import MasterUser
 
 
-class AccountType(NamedModel, FakeDeletableModel, TimeStampedModel, ConfigurationModel):
+class AccountType(NamedModel, FakeDeletableModel, TimeStampedModel, ConfigurationModel, ProvenanceModel):
     """
     Meta Entity, part of Finmars Configuration
     Mostly used for extra fragmentation of Reports
@@ -106,7 +107,7 @@ class AccountType(NamedModel, FakeDeletableModel, TimeStampedModel, Configuratio
         ]
 
 
-class Account(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel):
+class Account(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel, ProvenanceModel):
     """
     One of core entities - Account
     Could stand for anything that could hold money in real world e.g. Bank Accounts,

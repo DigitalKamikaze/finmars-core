@@ -19,6 +19,7 @@ from poms.common.models import (
 from poms.common.utils import date_now
 from poms.currencies.constants import MAIN_CURRENCIES
 from poms.obj_attrs.models import GenericAttribute
+from poms.provenance.models import ProvenanceModel
 from poms.users.models import MasterUser
 
 _l = logging.getLogger("poms.currencies")
@@ -38,7 +39,7 @@ def _load_currencies_data() -> dict:
 currencies_data = SimpleLazyObject(_load_currencies_data)
 
 
-class Currency(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel):
+class Currency(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel, ProvenanceModel):
     """
     Entity for Currency itself, e.g. USD, EUR, CHF
     Used in Transactions, in Reports, in Pricing,
@@ -182,7 +183,7 @@ class CurrencyHistoryManager(models.Manager):
         return history.fx_rate
 
 
-class CurrencyHistory(TimeStampedModel, ObjectStateModel):
+class CurrencyHistory(TimeStampedModel, ObjectStateModel, ProvenanceModel):
     """
     FX rate of Currencies for specific date
     Finmars is not bound to USD as base currency (Base Currency could be set in poms.users.EcosystemDefault)

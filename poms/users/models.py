@@ -722,6 +722,21 @@ class MasterUser(models.Model):
             expr="(ask+bid)/2",
             owner=finmars_bot,
         )
+
+        from poms.provenance.models import Source
+
+        Source.objects.create(name="-", owner=finmars_bot)
+        from poms.provenance.models import Provider
+
+        Provider.objects.create(name="-", owner=finmars_bot)
+        from poms.clients.models import Client
+
+        Client.objects.create(
+            master_user=self,
+            name="-",
+            owner_id=finmars_bot,
+        )
+
         # pricing_policy_dft = PricingPolicy.objects.create(
         #     master_user=self,
         #     name="DFT",

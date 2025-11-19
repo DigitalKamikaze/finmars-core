@@ -26,6 +26,7 @@ import poms.notifications.views as notifications
 import poms.portfolios.urls as portfolio_router
 import poms.pricing.views as pricing
 import poms.procedures.urls as procedure_router
+import poms.provenance.urls as provenance_router
 import poms.reconciliation.views as reconciliation
 import poms.reference_tables.views as reference_table
 import poms.reports.urls as report_router
@@ -332,6 +333,7 @@ urlpatterns = [
     re_path("^v1/ui/", include(ui_router.router.urls)),
     re_path("^v1/explorer/", include(explorer_router.router.urls)),
     re_path("^v1/clients/", include(clients_router.router.urls)),
+    re_path("^v1/provenance/", include(provenance_router.router.urls)),
     re_path("^v1/vault/", include(vault_router.router.urls)),
     re_path("^v1/iam/", include(iam_router.router.urls)),
     re_path("^v1/schedules/", include(schedule_router.router.urls)),

@@ -24,6 +24,7 @@ from poms.currencies.models import Currency
 from poms.file_reports.models import FileReport
 from poms.instruments.models import CostMethod, Instrument, PricingPolicy
 from poms.obj_attrs.models import GenericAttribute
+from poms.provenance.models import ProvenanceModel
 from poms.users.models import EcosystemDefault, MasterUser
 from poms_app import settings
 
@@ -58,7 +59,7 @@ class PortfolioClass(AbstractClassModel):
         verbose_name_plural = gettext_lazy("portfolio classes")
 
 
-class PortfolioType(NamedModel, FakeDeletableModel, TimeStampedModel, ConfigurationModel):
+class PortfolioType(NamedModel, FakeDeletableModel, TimeStampedModel, ConfigurationModel, ProvenanceModel):
     """
     Meta Entity, part of Finmars Configuration
     Mostly used for extra fragmentation of Reports
@@ -133,7 +134,7 @@ class PortfolioType(NamedModel, FakeDeletableModel, TimeStampedModel, Configurat
 
 
 # noinspection PyUnresolvedReferences
-class Portfolio(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel):
+class Portfolio(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel, ProvenanceModel):
     """
     Portfolio Entity - Way of grouping transactions in user-defined way.
     """
@@ -384,7 +385,7 @@ class Portfolio(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateMod
         _l.info(f"destroy_reconcile_histories of portfolio {self.user_code} succeed")
 
 
-class PortfolioRegister(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel):
+class PortfolioRegister(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel, ProvenanceModel):
     """
     Portfolio Register
 

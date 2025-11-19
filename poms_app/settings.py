@@ -2,7 +2,6 @@
 Django settings for the main Backend project.
 """
 
-
 import os
 from datetime import timedelta
 
@@ -13,7 +12,6 @@ import sentry_sdk
 
 from poms_app.log_formatter import GunicornWorkerIDLogFormatter
 from poms_app.utils import ENV_BOOL, ENV_INT, ENV_STR
-
 
 DEFAULT_CHARSET = "utf-8"
 SERVICE_NAME = "finmars"  # needs for Finmars Access Policy
@@ -91,6 +89,7 @@ INSTALLED_APPS = [
     "healthcheck",
     "poms.history",  # order is important because it registers models to listen to
     "poms.system",
+    "poms.provenance",
     "poms.pricing",
     "poms.users",
     "poms.iam",
@@ -255,7 +254,6 @@ if USE_DB_REPLICA:
     DATABASE_ROUTERS = [
         "poms_app.db_router.DbRouter",
     ]
-
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
@@ -646,7 +644,6 @@ CELERY_TASK_REJECT_ON_WORKER_LOST = ENV_BOOL("CELERY_TASK_REJECT_ON_WORKER_LOST"
 CELERY_SEND_EVENTS = ENV_BOOL("CELERY_SEND_EVENTS", True)
 CELERY_WORKER_SEND_TASK_EVENTS = ENV_BOOL("CELERY_WORKER_SEND_TASK_EVENTS", True)
 
-
 # CELERY_ACKS_LATE: If this is True, the task messages will be acknowledged after
 # the task has been executed, not just before, which is the default behavior.
 # This means the tasks can be recovered when a worker crashes, as the tasks
@@ -719,7 +716,6 @@ BLOOMBERG_SANDBOX_SEND_EMPTY = False
 BLOOMBERG_SANDBOX_SEND_FAIL = False
 BLOOMBERG_SANDBOX_WAIT_FAIL = False
 
-
 MEDIATOR_URL = ENV_STR("MEDIATOR_URL", "")
 DATA_FILE_SERVICE_URL = ENV_STR("DATA_FILE_SERVICE_URL", "")
 FINMARS_DATABASE_URL = ENV_STR("FINMARS_DATABASE_URL", "https://database.finmars.com/")
@@ -775,7 +771,6 @@ if USE_DEBUGGER:
     DEBUG_TOOLBAR_CONFIG = {
         "RESULTS_STORE_SIZE": 100,
     }
-
 
 ACCESS_POLICY_CACHE_TTL = ENV_INT("ACCESS_POLICY_CACHE_TTL", 300)  # 5 mins
 

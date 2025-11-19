@@ -167,6 +167,7 @@ api_docs
 postgres_data/
 rabbitmq_data/
 redis_data/
+finmars-core.iml
 
 finmars-core.iml
 

@@ -4,6 +4,7 @@ from poms.common.serializers import (
     ModelWithUserCodeSerializer,
 )
 from poms.obj_attrs.serializers import ModelWithAttributesSerializer
+from poms.provenance.serializers import ModelWithProvenanceSerializer
 from poms.strategies.fields import (
     Strategy1GroupDefault,
     Strategy1GroupField,
@@ -110,6 +111,7 @@ class Strategy1Serializer(
     ModelWithAttributesSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
     subgroup = Strategy1SubgroupField(default=Strategy1SubgroupDefault())

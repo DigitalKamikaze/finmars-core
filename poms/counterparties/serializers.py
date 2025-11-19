@@ -15,6 +15,7 @@ from poms.counterparties.models import (
 from poms.iam.serializers import ModelWithResourceGroupSerializer
 from poms.obj_attrs.serializers import ModelWithAttributesSerializer
 from poms.portfolios.fields import PortfolioField
+from poms.provenance.serializers import ModelWithProvenanceSerializer
 from poms.users.fields import MasterUserField
 
 
@@ -54,6 +55,7 @@ class CounterpartySerializer(
     ModelWithUserCodeSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
     group = CounterpartyGroupField()
@@ -164,6 +166,7 @@ class ResponsibleSerializer(
     ModelWithUserCodeSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
     group = ResponsibleGroupField()

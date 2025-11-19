@@ -53,6 +53,7 @@ from poms.instruments.models import (
 from poms.obj_attrs.models import GenericAttributeType, GenericClassifier
 from poms.portfolios.models import PortfolioType
 from poms.procedures.models import RequestDataFileProcedureInstance
+from poms.provenance.models import PlatformVersion, Provider, ProviderVersion, Source, SourceVersion
 from poms.strategies.models import (
     Strategy1Subgroup,
     Strategy2Subgroup,
@@ -115,7 +116,11 @@ RELATION_FIELDS_MAP = {
     "periodicity": Periodicity,
     "register_currency": Currency,
     "register_pricing_policy": PricingPolicy,
-    "register_instrument_type": InstrumentType,
+    "provider": Provider,
+    "provider_version": ProviderVersion,
+    "source": Source,
+    "source_version": SourceVersion,
+    "platform_version": PlatformVersion,
 }
 
 

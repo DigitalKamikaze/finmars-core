@@ -196,15 +196,10 @@ class ModelWithObjectStateSerializer(serializers.ModelSerializer):
 
         self.fields["origin_initiator_type"] = serializers.CharField(allow_null=True, required=False)
         self.fields["origin_manual_entry_point"] = serializers.CharField(allow_null=True, required=False)
-        self.fields["provider_user_code"] = serializers.CharField(allow_null=True, required=False)
-        self.fields["provider_version_semantic"] = serializers.CharField(allow_null=True, required=False)
-        self.fields["provider_version_calendar"] = serializers.CharField(allow_null=True, required=False)
-        self.fields["source_user_code"] = serializers.CharField(allow_null=True, required=False)
-        self.fields["source_version_semantic"] = serializers.CharField(allow_null=True, required=False)
-        self.fields["source_version_calendar"] = serializers.CharField(allow_null=True, required=False)
+
         self.fields["credential_user_code"] = serializers.CharField(allow_null=True, required=False)
         self.fields["credential_version_integer"] = serializers.CharField(allow_null=True, required=False)
-        self.fields["platform_version"] = serializers.CharField(allow_null=True, required=False)
+
         self.fields["origin_initiator_code"] = serializers.CharField(allow_null=True, required=False)
         self.fields["workflow_module_user_code"] = serializers.CharField(allow_null=True, required=False)
         self.fields["workflow_module_version_semantic"] = serializers.CharField(allow_null=True, required=False)

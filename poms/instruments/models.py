@@ -39,6 +39,7 @@ from poms.currencies.models import CurrencyHistory
 from poms.expressions_engine import formula
 from poms.instruments.finmars_quantlib import Actual365A, Actual365L
 from poms.obj_attrs.models import GenericAttribute
+from poms.provenance.models import ProvenanceModel
 from poms.users.models import EcosystemDefault, MasterUser
 
 _l = logging.getLogger("poms.instruments")
@@ -694,7 +695,7 @@ class PricingPolicy(NamedModel, TimeStampedModel, ConfigurationModel, ObjectStat
         base_manager_name = "objects"
 
 
-class InstrumentType(NamedModel, FakeDeletableModel, TimeStampedModel, ConfigurationModel):
+class InstrumentType(NamedModel, FakeDeletableModel, TimeStampedModel, ConfigurationModel, ProvenanceModel):
     DIRECT_POSITION = 1
     FACTOR_ADJUSTED_POSITION = 2
     DO_NOT_SHOW = 3
@@ -1372,7 +1373,7 @@ class InstrumentTypePricingPolicy(TimeStampedModel):
 
 
 # noinspection PyUnresolvedReferences
-class Instrument(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel):
+class Instrument(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel, ProvenanceModel):
     DIRECT_POSITION = 1
     FACTOR_ADJUSTED_POSITION = 2
     DO_NOT_SHOW = 3
@@ -2653,7 +2654,7 @@ class ManualPricingFormula(models.Model):
         return self.expr
 
 
-class AccrualCalculationSchedule(ObjectStateModel):
+class AccrualCalculationSchedule(ObjectStateModel, ProvenanceModel):
     instrument = models.ForeignKey(
         Instrument,
         related_name="accrual_calculation_schedules",
@@ -2782,7 +2783,7 @@ class AccrualCalculationSchedule(ObjectStateModel):
         return str(self.accrual_start_date)
 
 
-class PriceHistory(TimeStampedModel, ObjectStateModel):
+class PriceHistory(TimeStampedModel, ObjectStateModel, ProvenanceModel):
     instrument = models.ForeignKey(
         Instrument,
         related_name="prices",
@@ -3034,7 +3035,7 @@ class PriceHistory(TimeStampedModel, ObjectStateModel):
         super().save(*args, **kwargs)
 
 
-class InstrumentFactorSchedule(ObjectStateModel):
+class InstrumentFactorSchedule(ObjectStateModel, ProvenanceModel):
     instrument = models.ForeignKey(
         Instrument,
         related_name="factor_schedules",

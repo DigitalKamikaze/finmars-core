@@ -52,6 +52,7 @@ from poms.portfolios.models import (
     PortfolioType,
 )
 from poms.portfolios.utils import get_price_calculation_type
+from poms.provenance.serializers import ModelWithProvenanceSerializer
 from poms.users.fields import HiddenMemberField, MasterUserField
 from poms.users.models import EcosystemDefault
 
@@ -164,6 +165,7 @@ class PortfolioSerializer(
     ModelWithUserCodeSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
     registers = PortfolioPortfolioRegisterSerializer(
@@ -416,6 +418,7 @@ class PortfolioRegisterSerializer(
     ModelWithUserCodeSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
 

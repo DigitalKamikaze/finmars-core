@@ -9,6 +9,7 @@ from poms.common.models import (
     TimeStampedModel,
 )
 from poms.obj_attrs.models import GenericAttribute
+from poms.provenance.models import ProvenanceModel
 from poms.users.models import MasterUser
 
 
@@ -119,7 +120,7 @@ class Strategy1Subgroup(NamedModel, FakeDeletableModel, _SubgroupSystemAttrsMixi
         return self.master_user.strategy1_subgroup_id == self.id if self.master_user_id else False
 
 
-class Strategy1(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel):
+class Strategy1(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel, ProvenanceModel):
     master_user = models.ForeignKey(
         MasterUser,
         related_name="strategies1",
@@ -208,7 +209,7 @@ class Strategy2Subgroup(NamedModel, FakeDeletableModel, _SubgroupSystemAttrsMixi
         return self.master_user.strategy2_subgroup_id == self.id if self.master_user_id else False
 
 
-class Strategy2(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel):
+class Strategy2(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel, ProvenanceModel):
     master_user = models.ForeignKey(
         MasterUser,
         related_name="strategies2",
@@ -297,7 +298,7 @@ class Strategy3Subgroup(NamedModel, FakeDeletableModel, _SubgroupSystemAttrsMixi
         return self.master_user.strategy3_subgroup_id == self.id if self.master_user_id else False
 
 
-class Strategy3(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel):
+class Strategy3(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel, ProvenanceModel):
     master_user = models.ForeignKey(
         MasterUser,
         related_name="strategies3",

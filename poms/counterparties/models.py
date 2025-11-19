@@ -10,6 +10,7 @@ from poms.common.models import (
     TimeStampedModel,
 )
 from poms.obj_attrs.models import GenericAttribute
+from poms.provenance.models import ProvenanceModel
 from poms.users.models import MasterUser
 
 
@@ -68,7 +69,7 @@ class CounterpartyGroup(NamedModel, FakeDeletableModel):
 
 
 # noinspection PyUnresolvedReferences
-class Counterparty(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel):
+class Counterparty(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel, ProvenanceModel):
     """
     One of Core Finmars entities, real world meaning is hold here
     information about Company, Bank, Broker, StockExchange or other entity
@@ -209,7 +210,7 @@ class ResponsibleGroup(NamedModel, FakeDeletableModel):
 
 
 # noinspection PyUnresolvedReferences
-class Responsible(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel):
+class Responsible(NamedModel, FakeDeletableModel, TimeStampedModel, ObjectStateModel, ProvenanceModel):
     """
     One of Core Finmars entities, real world meaning is to indicate
     who is executing/initiator of Transaction

@@ -14,6 +14,7 @@ from poms.currencies.models import Currency, CurrencyHistory, CurrencyPricingPol
 from poms.instruments.fields import PricingPolicyField
 from poms.obj_attrs.serializers import ModelWithAttributesSerializer
 from poms.pricing.models import CurrencyHistoryError
+from poms.provenance.serializers import ModelWithProvenanceSerializer
 from poms.system_messages.handlers import send_system_message
 from poms.users.fields import MasterUserField
 from poms.users.utils import get_master_user_from_context, get_member_from_context
@@ -36,6 +37,7 @@ class CurrencySerializer(
     ModelWithAttributesSerializer,
     ModelWithTimeStampSerializer,
     ModelWithObjectStateSerializer,
+    ModelWithProvenanceSerializer,
 ):
     master_user = MasterUserField()
 
@@ -141,7 +143,9 @@ class CurrencyViewSerializer(ModelWithUserCodeSerializer):
         ]
 
 
-class CurrencyHistorySerializer(ModelMetaSerializer, ModelWithTimeStampSerializer, ModelWithObjectStateSerializer):
+class CurrencyHistorySerializer(
+    ModelMetaSerializer, ModelWithTimeStampSerializer, ModelWithObjectStateSerializer, ModelWithProvenanceSerializer
+):
     currency = CurrencyField()
     currency_object = CurrencyViewSerializer(source="currency", read_only=True)
     pricing_policy = PricingPolicyField(allow_null=False)

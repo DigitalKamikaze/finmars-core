@@ -756,7 +756,6 @@ EXPECTED_COMPLEX_TRANSACTION = {
     "user_date_5": None,
     "recon_fields": [],
     "execution_log": None,
-    "source": None,
     "inputs": [],
     "attributes": [
         {
@@ -883,4 +882,14 @@ EXPECTED_COMPLEX_TRANSACTION = {
     },
     "created_at": "20240823T16:41:00.0Z",
     "modified_at": "20240823T16:41:00.0Z",
+    "provider": None,
+    "provider_object": None,
+    "provider_version": None,
+    "provider_version_object": None,
+    "source": None,
+    "source_object": None,
+    "source_version": None,
+    "source_version_object": None,
+    "platform_version": None,
+    "platform_version_object": None,
 }

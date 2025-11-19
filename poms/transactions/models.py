@@ -32,6 +32,7 @@ from poms.instruments.models import (
 )
 from poms.obj_attrs.models import GenericAttribute
 from poms.portfolios.models import Portfolio
+from poms.provenance.models import ProvenanceModel
 from poms.strategies.models import Strategy1, Strategy2, Strategy3
 from poms.users.models import EcosystemDefault, FakeSequence, MasterUser
 
@@ -1881,6 +1882,89 @@ class TransactionTypeActionTransaction(TransactionTypeAction):
         verbose_name=gettext_lazy("is canceled"),
     )
 
+    # Provenance
+
+    provider = models.CharField(
+        max_length=EXPRESSION_FIELD_LENGTH,
+        blank=True,
+        default="",
+        null=True,
+        verbose_name=gettext_lazy("provider"),
+    )
+    provider_input = models.ForeignKey(
+        TransactionTypeInput,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name=gettext_lazy("provider input"),
+    )
+
+    provider_version = models.CharField(
+        max_length=EXPRESSION_FIELD_LENGTH,
+        blank=True,
+        default="",
+        null=True,
+        verbose_name=gettext_lazy("provider_version"),
+    )
+    provider_version_input = models.ForeignKey(
+        TransactionTypeInput,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name=gettext_lazy("provider_version input"),
+    )
+
+    source = models.CharField(
+        max_length=EXPRESSION_FIELD_LENGTH,
+        blank=True,
+        default="",
+        null=True,
+        verbose_name=gettext_lazy("source"),
+    )
+    source_input = models.ForeignKey(
+        TransactionTypeInput,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name=gettext_lazy("source_input input"),
+    )
+
+    source_version = models.CharField(
+        max_length=EXPRESSION_FIELD_LENGTH,
+        blank=True,
+        default="",
+        null=True,
+        verbose_name=gettext_lazy("source_version"),
+    )
+    source_version_input = models.ForeignKey(
+        TransactionTypeInput,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name=gettext_lazy("source_version input"),
+    )
+
+    platform_version = models.CharField(
+        max_length=EXPRESSION_FIELD_LENGTH,
+        blank=True,
+        default="",
+        null=True,
+        verbose_name=gettext_lazy("platform_version"),
+    )
+
+    platform_version_input = models.ForeignKey(
+        TransactionTypeInput,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name=gettext_lazy("platform_version input"),
+    )
+
     class Meta:
         verbose_name = gettext_lazy("transaction type action transaction")
         verbose_name_plural = gettext_lazy("transaction type action transactions")
@@ -2308,7 +2392,7 @@ class EventToHandle(NamedModel):
         verbose_name_plural = gettext_lazy("events to handle")
 
 
-class ComplexTransaction(TimeStampedModel):
+class ComplexTransaction(TimeStampedModel, ProvenanceModel):
     PRODUCTION = 1
     PENDING = 2
     IGNORE = 3
@@ -2957,7 +3041,7 @@ class ComplexTransactionInput(models.Model):
         ]
 
 
-class Transaction(models.Model):
+class Transaction(ProvenanceModel):
     master_user = models.ForeignKey(
         MasterUser,
         related_name="transactions",
