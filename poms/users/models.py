@@ -734,7 +734,7 @@ class MasterUser(models.Model):
         Client.objects.create(
             master_user=self,
             name="-",
-            owner_id=finmars_bot,
+            owner=finmars_bot,
         )
 
         # pricing_policy_dft = PricingPolicy.objects.create(
